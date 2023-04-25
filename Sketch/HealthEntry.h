@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "Pressure.h"
 #include "HealthState.h"
 #include "TimePeriod.h"
@@ -8,38 +8,38 @@ using namespace System;
 namespace Sketch
 {
 	/// <summary>
-	/// Запись сведений о состоянии здоровья пациента.
+	/// Р—Р°РїРёСЃСЊ СЃРІРµРґРµРЅРёР№ Рѕ СЃРѕСЃС‚РѕСЏРЅРёРё Р·РґРѕСЂРѕРІСЊСЏ РїР°С†РёРµРЅС‚Р°.
 	/// </summary>
 	public ref class HealthEntry
 	{
 	private:
 		/// <summary>
-		/// Дата создания записи.
+		/// Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ Р·Р°РїРёСЃРё.
 		/// </summary>
 		DateTime _recordDate;
 
 		/// <summary>
-		/// Период времени в момент, когда была сделана запись.
+		/// РџРµСЂРёРѕРґ РІСЂРµРјРµРЅРё РІ РјРѕРјРµРЅС‚, РєРѕРіРґР° Р±С‹Р»Р° СЃРґРµР»Р°РЅР° Р·Р°РїРёСЃСЊ.
 		/// </summary>
 		TimePeriod _recordTimePeriod;
 
 		/// <summary>
-		/// Давление пациента.
+		/// Р”Р°РІР»РµРЅРёРµ РїР°С†РёРµРЅС‚Р°.
 		/// </summary>
 		Sketch::Pressure _pressure;
 
 		/// <summary>
-		/// Пульс пациента.
+		/// РџСѓР»СЊСЃ РїР°С†РёРµРЅС‚Р°.
 		/// </summary>
 		UInt16 _pulse;
 
 		/// <summary>
-		/// Общее состояние здоровья пациента.
+		/// РћР±С‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ Р·РґРѕСЂРѕРІСЊСЏ РїР°С†РёРµРЅС‚Р°.
 		/// </summary>
 		HealthState _healthState;
 
 		/// <summary>
-		/// Примечание.
+		/// РџСЂРёРјРµС‡Р°РЅРёРµ.
 		/// </summary>
 		String^ _remark;
 
@@ -52,7 +52,7 @@ namespace Sketch
 					String^ remark);
 
 		/// <summary>
-		/// Получить дату создания записи.
+		/// РџРѕР»СѓС‡РёС‚СЊ РґР°С‚Сѓ СЃРѕР·РґР°РЅРёСЏ Р·Р°РїРёСЃРё.
 		/// </summary>
 		property DateTime RecordDate 
 		{
@@ -60,7 +60,7 @@ namespace Sketch
 		}
 
 		/// <summary>
-		/// Получить период времени в момент, когда была сделана запись.
+		/// РџРѕР»СѓС‡РёС‚СЊ РїРµСЂРёРѕРґ РІСЂРµРјРµРЅРё РІ РјРѕРјРµРЅС‚, РєРѕРіРґР° Р±С‹Р»Р° СЃРґРµР»Р°РЅР° Р·Р°РїРёСЃСЊ.
 		/// </summary>
 		property TimePeriod RecordTimePeriod
 		{
@@ -68,7 +68,7 @@ namespace Sketch
 		}
 
 		/// <summary>
-		/// Получить давление пациента.
+		/// РџРѕР»СѓС‡РёС‚СЊ РґР°РІР»РµРЅРёРµ РїР°С†РёРµРЅС‚Р°.
 		/// </summary>
 		property Sketch::Pressure Pressure
 		{
@@ -76,7 +76,7 @@ namespace Sketch
 		}
 
 		/// <summary>
-		/// Получить пульс пациента.
+		/// РџРѕР»СѓС‡РёС‚СЊ РїСѓР»СЊСЃ РїР°С†РёРµРЅС‚Р°.
 		/// </summary>
 		property UInt16 Pulse
 		{
@@ -84,7 +84,7 @@ namespace Sketch
 		}
 
 		/// <summary>
-		/// Получить общее состояние здоровья пациента.
+		/// РџРѕР»СѓС‡РёС‚СЊ РѕР±С‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ Р·РґРѕСЂРѕРІСЊСЏ РїР°С†РёРµРЅС‚Р°.
 		/// </summary>
 		property Sketch::HealthState HealthState
 		{
@@ -92,7 +92,7 @@ namespace Sketch
 		}
 
 		/// <summary>
-		/// Получить примечание.
+		/// РџРѕР»СѓС‡РёС‚СЊ РїСЂРёРјРµС‡Р°РЅРёРµ.
 		/// </summary>
 		property String^ Remark
 		{

@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Pressure.h"
 #include "HealthEntry.h"
+#include "MainForm.h"
 
 using namespace System;
 using namespace System::Windows::Forms;
@@ -38,6 +39,7 @@ void Main(array<System::String ^> ^args)
     Application::EnableVisualStyles();
     Application::SetCompatibleTextRenderingDefault(false);
 
-    //HealthForm^ form = gcnew HealthForm();
-    //Application::Run(form);
+    MainForm^ form = gcnew MainForm();
+
+    Application::Run(form);
 }

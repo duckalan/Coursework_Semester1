@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Pressure.h"
 
 Sketch::Pressure::Pressure(UInt16 systolic, UInt16 diastolic)

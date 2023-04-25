@@ -1,23 +1,23 @@
-#pragma once
+п»ї#pragma once
 
 namespace Sketch
 {
 	/// <summary>
-	/// Самочувствие пациента.
+	/// РЎР°РјРѕС‡СѓРІСЃС‚РІРёРµ РїР°С†РёРµРЅС‚Р°.
 	/// </summary>
 	public enum class HealthState {
 		/// <summary>
-		/// Хорошо.
+		/// РҐРѕСЂРѕС€Рѕ.
 		/// </summary>
 		Good = 2,
 
 		/// <summary>
-		/// Удовлетворительно.
+		/// РЈРґРѕРІР»РµС‚РІРѕСЂРёС‚РµР»СЊРЅРѕ.
 		/// </summary>
 		Satisfactorily = 1,
 
 		/// <summary>
-		/// Неудовлетворительно.
+		/// РќРµСѓРґРѕРІР»РµС‚РІРѕСЂРёС‚РµР»СЊРЅРѕ.
 		/// </summary>
 		Unsatisfactorily = 0
 	};

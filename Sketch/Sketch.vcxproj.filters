@@ -12,6 +12,9 @@
     <Filter Include="Sources">
       <UniqueIdentifier>{24458c6f-588e-4ceb-8dbf-6ba0437d0da5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Forms">
+      <UniqueIdentifier>{757e9326-9cea-4163-b299-8f27b6c8b994}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -37,6 +40,9 @@
     <ClInclude Include="Resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="MainForm.h">
+      <Filter>Forms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pressure.cpp">
@@ -52,6 +58,9 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainForm.cpp">
+      <Filter>Forms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
