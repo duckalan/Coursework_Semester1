@@ -40,6 +40,9 @@
     <ClInclude Include="Resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
+    <ClInclude Include="TestForm.h">
+      <Filter>Forms</Filter>
+    </ClInclude>
     <ClInclude Include="MainForm.h">
       <Filter>Forms</Filter>
     </ClInclude>

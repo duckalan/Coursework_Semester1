@@ -12,37 +12,6 @@ namespace Sketch
 	/// </summary>
 	public ref class HealthEntry
 	{
-	private:
-		/// <summary>
-		/// Дата создания записи.
-		/// </summary>
-		DateTime _recordDate;
-
-		/// <summary>
-		/// Период времени в момент, когда была сделана запись.
-		/// </summary>
-		TimePeriod _recordTimePeriod;
-
-		/// <summary>
-		/// Давление пациента.
-		/// </summary>
-		Sketch::Pressure _pressure;
-
-		/// <summary>
-		/// Пульс пациента.
-		/// </summary>
-		UInt16 _pulse;
-
-		/// <summary>
-		/// Общее состояние здоровья пациента.
-		/// </summary>
-		HealthState _healthState;
-
-		/// <summary>
-		/// Примечание.
-		/// </summary>
-		String^ _remark;
-
 	public:
 		HealthEntry(DateTime recordDate,
 					Sketch::TimePeriod recordTimePeriod,
@@ -52,51 +21,33 @@ namespace Sketch
 					String^ remark);
 
 		/// <summary>
-		/// Получить дату создания записи.
+		/// Дата создания записи.
 		/// </summary>
-		property DateTime RecordDate 
-		{
-			DateTime get();
-		}
+		property DateTime RecordDate;
 
 		/// <summary>
-		/// Получить период времени в момент, когда была сделана запись.
+		/// Период времени в момент, когда была сделана запись.
 		/// </summary>
-		property TimePeriod RecordTimePeriod
-		{
-			TimePeriod get();
-		}
+		property TimePeriod RecordTimePeriod;
 
 		/// <summary>
-		/// Получить давление пациента.
+		/// Давление пациента.
 		/// </summary>
-		property Sketch::Pressure Pressure
-		{
-			Sketch::Pressure get();
-		}
+		property Sketch::Pressure Pressure;
 
 		/// <summary>
-		/// Получить пульс пациента.
+		/// Пульс пациента.
 		/// </summary>
-		property UInt16 Pulse
-		{
-			UInt16 get();
-		}
+		property UInt16 Pulse;
 
 		/// <summary>
-		/// Получить общее состояние здоровья пациента.
+		/// Общее состояние здоровья пациента.
 		/// </summary>
-		property Sketch::HealthState HealthState
-		{
-			Sketch::HealthState get();
-		}
+		property Sketch::HealthState HealthState;
 
 		/// <summary>
-		/// Получить примечание.
+		/// Примечание.
 		/// </summary>
-		property String^ Remark
-		{
-			String^ get();
-		}
+		property String^ Remark;
 	};
 }
