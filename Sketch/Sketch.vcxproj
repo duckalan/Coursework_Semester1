@@ -128,17 +128,20 @@
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EntryEditorForm.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="HealthEntry.h" />
     <ClInclude Include="HealthState.h" />
     <ClInclude Include="MainForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="TestForm.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="Pressure.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="EntryTableUserControl.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
     <ClInclude Include="TimePeriod.h" />
   </ItemGroup>
   <ItemGroup>
@@ -159,17 +162,21 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="EntryEditorForm.resx">
+      <DependentUpon>EntryEditorForm.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.h</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TestForm.resx">
-      <DependentUpon>TestForm.h</DependentUpon>
+    <EmbeddedResource Include="EntryTableUserControl.resx">
+      <DependentUpon>EntryTableUserControl.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

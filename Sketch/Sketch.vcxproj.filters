@@ -15,6 +15,9 @@
     <Filter Include="Forms">
       <UniqueIdentifier>{757e9326-9cea-4163-b299-8f27b6c8b994}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UserControls">
+      <UniqueIdentifier>{5d137498-f895-427e-8268-5ec88447f17c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -40,10 +43,13 @@
     <ClInclude Include="Resource.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestForm.h">
+    <ClInclude Include="MainForm.h">
       <Filter>Forms</Filter>
     </ClInclude>
-    <ClInclude Include="MainForm.h">
+    <ClInclude Include="EntryTableUserControl.h">
+      <Filter>UserControls</Filter>
+    </ClInclude>
+    <ClInclude Include="EntryEditorForm.h">
       <Filter>Forms</Filter>
     </ClInclude>
   </ItemGroup>

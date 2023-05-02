@@ -4,6 +4,7 @@
 #include "TimePeriod.h"
 
 using namespace System;
+using namespace System::ComponentModel;
 
 namespace Sketch
 {
@@ -21,33 +22,39 @@ namespace Sketch
 					String^ remark);
 
 		/// <summary>
-		/// Дата создания записи.
+		/// Примечание.
 		/// </summary>
-		property DateTime RecordDate;
-
-		/// <summary>
-		/// Период времени в момент, когда была сделана запись.
-		/// </summary>
-		property TimePeriod RecordTimePeriod;
-
-		/// <summary>
-		/// Давление пациента.
-		/// </summary>
-		property Sketch::Pressure Pressure;
+		[DisplayName("Примечание")]
+		property String^ Remark;
 
 		/// <summary>
 		/// Пульс пациента.
 		/// </summary>
+		[DisplayName("Пульс")]
 		property UInt16 Pulse;
+
+		/// <summary>
+		/// Давление пациента.
+		/// </summary>
+		[DisplayName("Давление")]
+		property Sketch::Pressure Pressure;
 
 		/// <summary>
 		/// Общее состояние здоровья пациента.
 		/// </summary>
+		[DisplayName("Состояние здоровья")]
 		property Sketch::HealthState HealthState;
 
 		/// <summary>
-		/// Примечание.
+		/// Период времени в момент, когда была сделана запись.
 		/// </summary>
-		property String^ Remark;
+		[DisplayName("Период записи")]
+		property TimePeriod RecordTimePeriod;
+
+		/// <summary>
+		/// Дата создания записи.
+		/// </summary>
+		[DisplayName("Дата записи")]
+		property DateTime RecordDate;
 	};
 }

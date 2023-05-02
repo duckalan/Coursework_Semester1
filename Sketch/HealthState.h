@@ -5,20 +5,14 @@ namespace Sketch
 	/// <summary>
 	/// Самочувствие пациента.
 	/// </summary>
-	public enum class HealthState {
-		/// <summary>
-		/// Хорошо.
-		/// </summary>
-		Good = 2,
+	public enum class HealthState 
+	{
+		// Используются русские названия, потому что
+		// парсить и биндить их гораздо проще
+		Хорошо,
 
-		/// <summary>
-		/// Удовлетворительно.
-		/// </summary>
-		Satisfactorily = 1,
+		Удовлетворительно,
 
-		/// <summary>
-		/// Неудовлетворительно.
-		/// </summary>
-		Unsatisfactorily = 0
+		Неудовлетворительно 
 	};
 }

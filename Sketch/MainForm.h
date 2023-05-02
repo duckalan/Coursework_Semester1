@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "HealthEntry.h"
+#include "EntryTableUserControl.h"
 
 namespace Sketch {
 
@@ -15,19 +16,17 @@ namespace Sketch {
 	/// </summary>
 	public ref class MainForm : public System::Windows::Forms::Form
 	{
+		/// <summary>
+		/// Счётчик новых вкладок для добавления нумерации в их названия.
+		/// </summary>
+		int newTabPageCounter = 1;
 	public:
 		MainForm(void)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
 		}
 
 	protected:
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
 		~MainForm()
 		{
 			if (components)
@@ -66,9 +65,6 @@ namespace Sketch {
 	private: System::Windows::Forms::Label^ welcomeLabel;
 
 	private:
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
@@ -81,6 +77,7 @@ namespace Sketch {
 			this->mainTabControl = (gcnew System::Windows::Forms::TabControl());
 			this->initialTabPage = (gcnew System::Windows::Forms::TabPage());
 			this->initialPanel = (gcnew System::Windows::Forms::Panel());
+			this->welcomeLabel = (gcnew System::Windows::Forms::Label());
 			this->createNewFileButton = (gcnew System::Windows::Forms::Button());
 			this->openFileButton = (gcnew System::Windows::Forms::Button());
 			this->mainMenuStrip = (gcnew System::Windows::Forms::MenuStrip());
@@ -102,7 +99,6 @@ namespace Sketch {
 			this->графикДавленияЗаПоследние30ДнейToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
-			this->welcomeLabel = (gcnew System::Windows::Forms::Label());
 			this->mainTabControl->SuspendLayout();
 			this->initialTabPage->SuspendLayout();
 			this->initialPanel->SuspendLayout();
@@ -116,7 +112,7 @@ namespace Sketch {
 			this->mainTabControl->Location = System::Drawing::Point(0, 27);
 			this->mainTabControl->Name = L"mainTabControl";
 			this->mainTabControl->SelectedIndex = 0;
-			this->mainTabControl->Size = System::Drawing::Size(784, 334);
+			this->mainTabControl->Size = System::Drawing::Size(884, 334);
 			this->mainTabControl->TabIndex = 0;
 			this->mainTabControl->Selected += gcnew System::Windows::Forms::TabControlEventHandler(this, &MainForm::mainTabControl_Selected);
 			// 
@@ -126,7 +122,7 @@ namespace Sketch {
 			this->initialTabPage->Location = System::Drawing::Point(4, 25);
 			this->initialTabPage->Name = L"initialTabPage";
 			this->initialTabPage->Padding = System::Windows::Forms::Padding(3);
-			this->initialTabPage->Size = System::Drawing::Size(776, 305);
+			this->initialTabPage->Size = System::Drawing::Size(876, 305);
 			this->initialTabPage->TabIndex = 0;
 			this->initialTabPage->Text = L"Начальное окно";
 			this->initialTabPage->UseVisualStyleBackColor = true;
@@ -139,13 +135,27 @@ namespace Sketch {
 			this->initialPanel->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->initialPanel->Location = System::Drawing::Point(3, 3);
 			this->initialPanel->Name = L"initialPanel";
-			this->initialPanel->Size = System::Drawing::Size(770, 299);
+			this->initialPanel->Size = System::Drawing::Size(870, 299);
 			this->initialPanel->TabIndex = 2;
+			// 
+			// welcomeLabel
+			// 
+			this->welcomeLabel->Anchor = System::Windows::Forms::AnchorStyles::None;
+			this->welcomeLabel->AutoSize = true;
+			this->welcomeLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->welcomeLabel->Location = System::Drawing::Point(335, 50);
+			this->welcomeLabel->Name = L"welcomeLabel";
+			this->welcomeLabel->Size = System::Drawing::Size(231, 29);
+			this->welcomeLabel->TabIndex = 2;
+			this->welcomeLabel->Text = L"Добро пожаловать";
 			// 
 			// createNewFileButton
 			// 
 			this->createNewFileButton->Anchor = System::Windows::Forms::AnchorStyles::None;
-			this->createNewFileButton->Location = System::Drawing::Point(180, 120);
+			this->createNewFileButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->createNewFileButton->Location = System::Drawing::Point(230, 120);
 			this->createNewFileButton->MaximumSize = System::Drawing::Size(300, 100);
 			this->createNewFileButton->MinimumSize = System::Drawing::Size(150, 50);
 			this->createNewFileButton->Name = L"createNewFileButton";
@@ -158,7 +168,9 @@ namespace Sketch {
 			// openFileButton
 			// 
 			this->openFileButton->Anchor = System::Windows::Forms::AnchorStyles::None;
-			this->openFileButton->Location = System::Drawing::Point(435, 120);
+			this->openFileButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->openFileButton->Location = System::Drawing::Point(485, 120);
 			this->openFileButton->MaximumSize = System::Drawing::Size(300, 100);
 			this->openFileButton->MinimumSize = System::Drawing::Size(150, 50);
 			this->openFileButton->Name = L"openFileButton";
@@ -177,7 +189,7 @@ namespace Sketch {
 			});
 			this->mainMenuStrip->Location = System::Drawing::Point(0, 0);
 			this->mainMenuStrip->Name = L"mainMenuStrip";
-			this->mainMenuStrip->Size = System::Drawing::Size(784, 27);
+			this->mainMenuStrip->Size = System::Drawing::Size(884, 27);
 			this->mainMenuStrip->TabIndex = 1;
 			this->mainMenuStrip->Text = L"Главное меню";
 			// 
@@ -194,14 +206,14 @@ namespace Sketch {
 			// newFileToolStripMenuItem
 			// 
 			this->newFileToolStripMenuItem->Name = L"newFileToolStripMenuItem";
-			this->newFileToolStripMenuItem->Size = System::Drawing::Size(145, 24);
+			this->newFileToolStripMenuItem->Size = System::Drawing::Size(180, 24);
 			this->newFileToolStripMenuItem->Text = L"Создать";
 			this->newFileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::createNewFileButton_Click);
 			// 
 			// openFileToolStripMenuItem
 			// 
 			this->openFileToolStripMenuItem->Name = L"openFileToolStripMenuItem";
-			this->openFileToolStripMenuItem->Size = System::Drawing::Size(145, 24);
+			this->openFileToolStripMenuItem->Size = System::Drawing::Size(180, 24);
 			this->openFileToolStripMenuItem->Text = L"Открыть";
 			this->openFileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::openFileButton_Click);
 			// 
@@ -209,8 +221,9 @@ namespace Sketch {
 			// 
 			this->saveFileToolStripMenuItem->Enabled = false;
 			this->saveFileToolStripMenuItem->Name = L"saveFileToolStripMenuItem";
-			this->saveFileToolStripMenuItem->Size = System::Drawing::Size(145, 24);
+			this->saveFileToolStripMenuItem->Size = System::Drawing::Size(180, 24);
 			this->saveFileToolStripMenuItem->Text = L"Сохранить";
+			this->saveFileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveFileToolStripMenuItem_Click);
 			// 
 			// filtersToolStripMenu
 			// 
@@ -313,31 +326,20 @@ namespace Sketch {
 			// 
 			this->openFileDialog->FileName = L"openFileDialog1";
 			// 
-			// welcomeLabel
-			// 
-			this->welcomeLabel->Anchor = System::Windows::Forms::AnchorStyles::None;
-			this->welcomeLabel->AutoSize = true;
-			this->welcomeLabel->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(204)));
-			this->welcomeLabel->Location = System::Drawing::Point(285, 50);
-			this->welcomeLabel->Name = L"welcomeLabel";
-			this->welcomeLabel->Size = System::Drawing::Size(201, 25);
-			this->welcomeLabel->TabIndex = 2;
-			this->welcomeLabel->Text = L"Добро пожаловать";
-			// 
 			// MainForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(784, 361);
+			this->ClientSize = System::Drawing::Size(884, 361);
 			this->Controls->Add(this->mainTabControl);
 			this->Controls->Add(this->mainMenuStrip);
 			this->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->MainMenuStrip = this->mainMenuStrip;
 			this->Margin = System::Windows::Forms::Padding(4);
-			this->MinimumSize = System::Drawing::Size(800, 400);
+			this->MinimumSize = System::Drawing::Size(900, 400);
 			this->Name = L"MainForm";
+			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
 			this->Text = L"MainForm";
 			this->mainTabControl->ResumeLayout(false);
 			this->initialTabPage->ResumeLayout(false);
@@ -351,33 +353,39 @@ namespace Sketch {
 		}
 #pragma endregion
 
-		// В user control вместе с таблицей
-		List<HealthEntry^>^ entryList;
-
-		// Счётчик новых вкладок
-		int newTabPageCounter = 1;
-
-		// Создание новой вкладки для нового файла
+		
+/// <summary>
+///  Создание новой вкладки для нового файла
+/// </summary>
 private: System::Void createNewFileButton_Click(System::Object^ sender, System::EventArgs^ e) 
 	{
+		// Создаём название и текст вкладки с нумерацией
 		String^ newTabPageText = String::Format("Без названия{0}", newTabPageCounter);
 		String^ newTabPageName = String::Format("newTabPage{0}", newTabPageCounter);
 
+		// Создаём вкладку
 		TabPage^ newTabPage = gcnew TabPage(newTabPageText);
 		newTabPage->Name = newTabPageName;
+
+		// Создаём в ней пустую таблицу, добавляем вкладку 
+		// в mainTabControl и открываем
+		EntryTableUserControl^ entryTable = gcnew EntryTableUserControl();
+		entryTable->Dock = DockStyle::Fill;
+		newTabPage->Controls->Add(entryTable);
+
 		mainTabControl->TabPages->Add(newTabPage);
 		mainTabControl->SelectTab(newTabPageName);
+
 		newTabPageCounter++;
-
-		// TODO: СОЗДАНИЕ НОВОЙ ПУСТОЙ ТАБЛИЦЫ
-
 	}
 
 		// TODO: СОБЫТИЕ - НАЖАТИЕ ПКМ НА TABPAGE 
 		// С ВЫВОДОМ СПИСКА: УДАЛИТЬ, ПЕРЕИМЕНОВАТЬ
 
-		// Делаем активными/неактивными опции меню, которые
-		// нужны только для открытого файла	
+
+/// <summary>
+/// Делаем активными/неактивными опции меню, которые нужны только для открытого файла	
+/// </summary>
 private: System::Void mainTabControl_Selected(System::Object^ sender, System::Windows::Forms::TabControlEventArgs^ e) 
 {
 	
@@ -395,7 +403,9 @@ private: System::Void mainTabControl_Selected(System::Object^ sender, System::Wi
 	}
 }
 
-	   // Открытие существующего файла
+/// <summary>
+/// Открытие существующего файла.
+/// </summary>
 private: System::Void openFileButton_Click(System::Object^ sender, System::EventArgs^ e) 
 {
 	if (openFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::Cancel)
@@ -423,6 +433,11 @@ private: System::Void openFileButton_Click(System::Object^ sender, System::Event
 
 	// TODO: ЗАПОЛНЕНИЕ ТАБЛИЦЫ ДАННЫМИ ИЗ ФАЙЛА
 	// И ДОБАВИТЬ ФИЛЬТР НА РАСШИРЕНИЕ
+}
+/// <summary>
+/// Сохранить файл.
+/// </summary>
+private: System::Void saveFileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

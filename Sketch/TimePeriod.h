@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 namespace Sketch
 {
 	/// <summary>
@@ -8,12 +7,15 @@ namespace Sketch
 	/// </summary>
 	public enum class TimePeriod
 	{
-		Morning,
+		// Используются русские названия, потому что
+		// парсить и биндить их гораздо проще
 
-		Day,
+		Утро,
 
-		Afternoon,
+		День,
 
-		Night
+		Вечер,
+
+		Ночь
 	};
 }
