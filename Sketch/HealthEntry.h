@@ -11,6 +11,7 @@ namespace Sketch
 	/// <summary>
 	/// Запись сведений о состоянии здоровья пациента.
 	/// </summary>
+	[Serializable]
 	public ref class HealthEntry
 	{
 	public:

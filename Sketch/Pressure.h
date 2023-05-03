@@ -6,6 +6,7 @@ namespace Sketch
 	/// <summary>
 	/// Давление пациента.
 	/// </summary>
+	[Serializable]
 	public value class Pressure
 	{
 	private:

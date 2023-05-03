@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "HealthEntry.h"
 #include "TimePeriod.h"
 #include "Pressure.h"
@@ -14,22 +14,22 @@ namespace Sketch {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Форма для создания или редактирования записей.
+	/// Р¤РѕСЂРјР° РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РёР»Рё СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ Р·Р°РїРёСЃРµР№.
 	/// </summary>
 	public ref class EntryEditorForm : public System::Windows::Forms::Form
 	{
 		/// <summary>
-		/// Список родительской формы. Передаём его в эту форму
-		/// для добавления в него новых записей.
+		/// РЎРїРёСЃРѕРє СЂРѕРґРёС‚РµР»СЊСЃРєРѕР№ С„РѕСЂРјС‹. РџРµСЂРµРґР°С‘Рј РµРіРѕ РІ СЌС‚Сѓ С„РѕСЂРјСѓ
+		/// РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ РІ РЅРµРіРѕ РЅРѕРІС‹С… Р·Р°РїРёСЃРµР№.
 		/// </summary>
 		BindingList<HealthEntry^>^ _parentEntryList;
 
 		/// <summary>
-		/// Показывает, открыта ли форма для редактирования уже существующей записи.
+		/// РџРѕРєР°Р·С‹РІР°РµС‚, РѕС‚РєСЂС‹С‚Р° Р»Рё С„РѕСЂРјР° РґР»СЏ СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµР№ Р·Р°РїРёСЃРё.
 		/// </summary>
 		bool isEditing = false;
 
-		// Всплывающие подсказки при ошибках ввода
+		// Р’СЃРїР»С‹РІР°СЋС‰РёРµ РїРѕРґСЃРєР°Р·РєРё РїСЂРё РѕС€РёР±РєР°С… РІРІРѕРґР°
 		ToolTip^ pressureToolTip = gcnew ToolTip();
 		ToolTip^ pulseToolTip = gcnew ToolTip();
 		ToolTip^ insertIndexToolTip = gcnew ToolTip();
@@ -38,62 +38,62 @@ namespace Sketch {
 
 	public:
 		/// <summary>
-		/// Конструктор для создания новой записи в списке <paramref name="parentEntryList"/>.
+		/// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РЅРѕРІРѕР№ Р·Р°РїРёСЃРё РІ СЃРїРёСЃРєРµ <paramref name="parentEntryList"/>.
 		/// </summary>
 		EntryEditorForm(BindingList<HealthEntry^>^ parentEntryList)
 		{
 			InitializeComponent();
 			_parentEntryList = parentEntryList;
 
-			// Значение по умолчанию
-			insertIndexComboBox->SelectedItem = "Конец";
+			// Р—РЅР°С‡РµРЅРёРµ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+			insertIndexComboBox->SelectedItem = "РљРѕРЅРµС†";
 
-			// Биндим все значения перечислений в комбобоксы
+			// Р‘РёРЅРґРёРј РІСЃРµ Р·РЅР°С‡РµРЅРёСЏ РїРµСЂРµС‡РёСЃР»РµРЅРёР№ РІ РєРѕРјР±РѕР±РѕРєСЃС‹
 			recordTimePeriodComboBox->DataSource = Enum::GetValues(TimePeriod::typeid);
 
 			healthStateComboBox->DataSource = Enum::GetValues(HealthState::typeid);
 		}
 
 		/// <summary>
-		/// Конструктор для передачи редактируемой записи с индексом <paramref name="entryIndex"/> в списке <paramref name="parentEntryList"/>.
+		/// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ РґР»СЏ РїРµСЂРµРґР°С‡Рё СЂРµРґР°РєС‚РёСЂСѓРµРјРѕР№ Р·Р°РїРёСЃРё СЃ РёРЅРґРµРєСЃРѕРј <paramref name="entryIndex"/> РІ СЃРїРёСЃРєРµ <paramref name="parentEntryList"/>.
 		/// </summary>
 		EntryEditorForm(BindingList<HealthEntry^>^ parentEntryList, int edittingEntryIndex) : EntryEditorForm(parentEntryList)
 		{
 			isEditing = true;
 
-			// Меняем нужный текст
-			Text = String::Format("Редактирование записи по индексу {0}", edittingEntryIndex);
-			addAndExitButton->Text = "Изменить";
+			// РњРµРЅСЏРµРј РЅСѓР¶РЅС‹Р№ С‚РµРєСЃС‚
+			Text = String::Format("Р РµРґР°РєС‚РёСЂРѕРІР°РЅРёРµ Р·Р°РїРёСЃРё РїРѕ РёРЅРґРµРєСЃСѓ {0}", edittingEntryIndex);
+			addAndExitButton->Text = "РР·РјРµРЅРёС‚СЊ";
 
-			// Скрываем панель для ввода индекса вставки.
+			// РЎРєСЂС‹РІР°РµРј РїР°РЅРµР»СЊ РґР»СЏ РІРІРѕРґР° РёРЅРґРµРєСЃР° РІСЃС‚Р°РІРєРё.
 			insertIndexPanel->Visible = false;
 
-			// Устанавливаем в контролах значения переданной записи
+			// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РІ РєРѕРЅС‚СЂРѕР»Р°С… Р·РЅР°С‡РµРЅРёСЏ РїРµСЂРµРґР°РЅРЅРѕР№ Р·Р°РїРёСЃРё
 			auto inputEntry = _parentEntryList[edittingEntryIndex];
 
 			recordDateTimePicker->Value = inputEntry->RecordDate;
 
-			// Здесь изменить выбранное значение можно только через
-			// изменение индекса. Индекс получаем поиском строки,
-			// которая является именем переданного перечисления
+			// Р—РґРµСЃСЊ РёР·РјРµРЅРёС‚СЊ РІС‹Р±СЂР°РЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РјРѕР¶РЅРѕ С‚РѕР»СЊРєРѕ С‡РµСЂРµР·
+			// РёР·РјРµРЅРµРЅРёРµ РёРЅРґРµРєСЃР°. РРЅРґРµРєСЃ РїРѕР»СѓС‡Р°РµРј РїРѕРёСЃРєРѕРј СЃС‚СЂРѕРєРё,
+			// РєРѕС‚РѕСЂР°СЏ СЏРІР»СЏРµС‚СЃСЏ РёРјРµРЅРµРј РїРµСЂРµРґР°РЅРЅРѕРіРѕ РїРµСЂРµС‡РёСЃР»РµРЅРёСЏ
 			auto recordTimePeriodInputIndex = recordTimePeriodComboBox->FindStringExact(Enum::GetName(TimePeriod::typeid, inputEntry->RecordTimePeriod));
 			recordTimePeriodComboBox->SelectedIndex = recordTimePeriodInputIndex;
 
 			auto healthStateInputIndex = healthStateComboBox->FindStringExact(Enum::GetName(HealthState::typeid, inputEntry->HealthState));
 			healthStateComboBox->SelectedIndex = healthStateInputIndex;
 
-			// Просто "= inputEntry->Pressure" нельзя, так все цифры
-			// будут только в левой части маски перед /
+			// РџСЂРѕСЃС‚Рѕ "= inputEntry->Pressure" РЅРµР»СЊР·СЏ, С‚Р°Рє РІСЃРµ С†РёС„СЂС‹
+			// Р±СѓРґСѓС‚ С‚РѕР»СЊРєРѕ РІ Р»РµРІРѕР№ С‡Р°СЃС‚Рё РјР°СЃРєРё РїРµСЂРµРґ /
 			pressureMaskedTextBox->Text = inputEntry->Pressure.Systolic.ToString();
 			pressureMaskedTextBox->Text += inputEntry->Pressure.Diastolic.ToString();
 
 			pulseMaskedTextBox->Text = inputEntry->Pulse.ToString();
 			remarkTextBox->Text = inputEntry->Remark;
 
-			// Метод для парсинга один и тот же и для добавления, и для
-			// редактирования. Данные для добавляемой (а значит и для
-			// редактируемой) записи берутся из этого комбобокса.
-			// По хорошему надо было как-то разделить эти формы
+			// РњРµС‚РѕРґ РґР»СЏ РїР°СЂСЃРёРЅРіР° РѕРґРёРЅ Рё С‚РѕС‚ Р¶Рµ Рё РґР»СЏ РґРѕР±Р°РІР»РµРЅРёСЏ, Рё РґР»СЏ
+			// СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ. Р”Р°РЅРЅС‹Рµ РґР»СЏ РґРѕР±Р°РІР»СЏРµРјРѕР№ (Р° Р·РЅР°С‡РёС‚ Рё РґР»СЏ
+			// СЂРµРґР°РєС‚РёСЂСѓРµРјРѕР№) Р·Р°РїРёСЃРё Р±РµСЂСѓС‚СЃСЏ РёР· СЌС‚РѕРіРѕ РєРѕРјР±РѕР±РѕРєСЃР°.
+			// РџРѕ С…РѕСЂРѕС€РµРјСѓ РЅР°РґРѕ Р±С‹Р»Рѕ РєР°Рє-С‚Рѕ СЂР°Р·РґРµР»РёС‚СЊ СЌС‚Рё С„РѕСЂРјС‹
 			insertIndexComboBox->Text = edittingEntryIndex.ToString();
 		}
 
@@ -209,7 +209,7 @@ namespace Sketch {
 			this->remarkLabel->Name = L"remarkLabel";
 			this->remarkLabel->Size = System::Drawing::Size(123, 45);
 			this->remarkLabel->TabIndex = 6;
-			this->remarkLabel->Text = L"Примечание";
+			this->remarkLabel->Text = L"РџСЂРёРјРµС‡Р°РЅРёРµ";
 			this->remarkLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// pulseLabel
@@ -223,7 +223,7 @@ namespace Sketch {
 			this->pulseLabel->Name = L"pulseLabel";
 			this->pulseLabel->Size = System::Drawing::Size(66, 45);
 			this->pulseLabel->TabIndex = 5;
-			this->pulseLabel->Text = L"Пульс";
+			this->pulseLabel->Text = L"РџСѓР»СЊСЃ";
 			this->pulseLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// pressureLabel
@@ -237,7 +237,7 @@ namespace Sketch {
 			this->pressureLabel->Name = L"pressureLabel";
 			this->pressureLabel->Size = System::Drawing::Size(102, 45);
 			this->pressureLabel->TabIndex = 4;
-			this->pressureLabel->Text = L"Давление";
+			this->pressureLabel->Text = L"Р”Р°РІР»РµРЅРёРµ";
 			this->pressureLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// healthStateLabel
@@ -251,7 +251,7 @@ namespace Sketch {
 			this->healthStateLabel->Name = L"healthStateLabel";
 			this->healthStateLabel->Size = System::Drawing::Size(211, 45);
 			this->healthStateLabel->TabIndex = 3;
-			this->healthStateLabel->Text = L"Состояние здоровья";
+			this->healthStateLabel->Text = L"РЎРѕСЃС‚РѕСЏРЅРёРµ Р·РґРѕСЂРѕРІСЊСЏ";
 			this->healthStateLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// recordTimePeriodLabel
@@ -265,7 +265,7 @@ namespace Sketch {
 			this->recordTimePeriodLabel->Name = L"recordTimePeriodLabel";
 			this->recordTimePeriodLabel->Size = System::Drawing::Size(88, 45);
 			this->recordTimePeriodLabel->TabIndex = 2;
-			this->recordTimePeriodLabel->Text = L"Период записи";
+			this->recordTimePeriodLabel->Text = L"РџРµСЂРёРѕРґ Р·Р°РїРёСЃРё";
 			this->recordTimePeriodLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// recordDateLabel
@@ -279,7 +279,7 @@ namespace Sketch {
 			this->recordDateLabel->Name = L"recordDateLabel";
 			this->recordDateLabel->Size = System::Drawing::Size(174, 45);
 			this->recordDateLabel->TabIndex = 1;
-			this->recordDateLabel->Text = L"Дата записи";
+			this->recordDateLabel->Text = L"Р”Р°С‚Р° Р·Р°РїРёСЃРё";
 			this->recordDateLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// remarkTextBox
@@ -385,7 +385,7 @@ namespace Sketch {
 			this->cancelButton->Name = L"cancelButton";
 			this->cancelButton->Size = System::Drawing::Size(250, 50);
 			this->cancelButton->TabIndex = 2;
-			this->cancelButton->Text = L"Отмена";
+			this->cancelButton->Text = L"РћС‚РјРµРЅР°";
 			this->cancelButton->UseVisualStyleBackColor = true;
 			this->cancelButton->Click += gcnew System::EventHandler(this, &EntryEditorForm::cancelButton_Click);
 			// 
@@ -397,7 +397,7 @@ namespace Sketch {
 			this->addAndExitButton->Name = L"addAndExitButton";
 			this->addAndExitButton->Size = System::Drawing::Size(250, 50);
 			this->addAndExitButton->TabIndex = 1;
-			this->addAndExitButton->Text = L"Добавить";
+			this->addAndExitButton->Text = L"Р”РѕР±Р°РІРёС‚СЊ";
 			this->addAndExitButton->UseVisualStyleBackColor = true;
 			this->addAndExitButton->Click += gcnew System::EventHandler(this, &EntryEditorForm::addAndExitButton_Click);
 			// 
@@ -416,7 +416,7 @@ namespace Sketch {
 			this->insertIndexComboBox->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
 			this->insertIndexComboBox->FormattingEnabled = true;
-			this->insertIndexComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Начало", L"Конец" });
+			this->insertIndexComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"РќР°С‡Р°Р»Рѕ", L"РљРѕРЅРµС†" });
 			this->insertIndexComboBox->Location = System::Drawing::Point(228, 7);
 			this->insertIndexComboBox->Name = L"insertIndexComboBox";
 			this->insertIndexComboBox->Size = System::Drawing::Size(85, 28);
@@ -432,7 +432,7 @@ namespace Sketch {
 			this->insertIndexLabel->Name = L"insertIndexLabel";
 			this->insertIndexLabel->Size = System::Drawing::Size(212, 20);
 			this->insertIndexLabel->TabIndex = 0;
-			this->insertIndexLabel->Text = L"Индекс места добавления";
+			this->insertIndexLabel->Text = L"РРЅРґРµРєСЃ РјРµСЃС‚Р° РґРѕР±Р°РІР»РµРЅРёСЏ";
 			// 
 			// EntryEditorForm
 			// 
@@ -446,7 +446,7 @@ namespace Sketch {
 			this->MinimumSize = System::Drawing::Size(900, 400);
 			this->Name = L"EntryEditorForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"Добавление новой записи";
+			this->Text = L"Р”РѕР±Р°РІР»РµРЅРёРµ РЅРѕРІРѕР№ Р·Р°РїРёСЃРё";
 			this->tableLayoutPanel1->ResumeLayout(false);
 			this->tableLayoutPanel1->PerformLayout();
 			this->panel1->ResumeLayout(false);
@@ -458,18 +458,18 @@ namespace Sketch {
 #pragma endregion
 
 		/// <summary>
-		/// Преобразует пользовательский ввод в объект класса HealthEntry^ и даёт
-		/// его индекс в списке.
+		/// РџСЂРµРѕР±СЂР°Р·СѓРµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ РІРІРѕРґ РІ РѕР±СЉРµРєС‚ РєР»Р°СЃСЃР° HealthEntry^ Рё РґР°С‘С‚
+		/// РµРіРѕ РёРЅРґРµРєСЃ РІ СЃРїРёСЃРєРµ.
 		/// </summary>
-		/// <param name="output">При успешном преобразовании содержит объект 
-		/// с введёнными пользователем значениями полей.</param>
-		/// <param name="outputInsertIndex">При успешном преобразовании содержит 
-		/// индекс возвращаемого объекта в списке.</param>
-		/// <returns>Возвращает значение, указывающее, успешно 
-		/// ли выполнена операция.</returns>
+		/// <param name="output">РџСЂРё СѓСЃРїРµС€РЅРѕРј РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРё СЃРѕРґРµСЂР¶РёС‚ РѕР±СЉРµРєС‚ 
+		/// СЃ РІРІРµРґС‘РЅРЅС‹РјРё РїРѕР»СЊР·РѕРІР°С‚РµР»РµРј Р·РЅР°С‡РµРЅРёСЏРјРё РїРѕР»РµР№.</param>
+		/// <param name="outputInsertIndex">РџСЂРё СѓСЃРїРµС€РЅРѕРј РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРё СЃРѕРґРµСЂР¶РёС‚ 
+		/// РёРЅРґРµРєСЃ РІРѕР·РІСЂР°С‰Р°РµРјРѕРіРѕ РѕР±СЉРµРєС‚Р° РІ СЃРїРёСЃРєРµ.</param>
+		/// <returns>Р’РѕР·РІСЂР°С‰Р°РµС‚ Р·РЅР°С‡РµРЅРёРµ, СѓРєР°Р·С‹РІР°СЋС‰РµРµ, СѓСЃРїРµС€РЅРѕ 
+		/// Р»Рё РІС‹РїРѕР»РЅРµРЅР° РѕРїРµСЂР°С†РёСЏ.</returns>
 		bool TryParseEntryFromInput(HealthEntry^% output, int% outputInsertIndex)
 		{
-			// Проверка ввода давления и пульса
+			// РџСЂРѕРІРµСЂРєР° РІРІРѕРґР° РґР°РІР»РµРЅРёСЏ Рё РїСѓР»СЊСЃР°
 			bool isInputValide = true;
 			UInt16 systolic;
 			UInt16 diastolic;
@@ -480,35 +480,35 @@ namespace Sketch {
 			auto isDiastolicParsed = UInt16::TryParse(pressureStrings[1], diastolic);
 			auto isPulseParsed = UInt16::TryParse(pulseMaskedTextBox->Text, pulse);
 
-			// Если не распарсено, значит поле пустое
+			// Р•СЃР»Рё РЅРµ СЂР°СЃРїР°СЂСЃРµРЅРѕ, Р·РЅР°С‡РёС‚ РїРѕР»Рµ РїСѓСЃС‚РѕРµ
 			if (!isSystolicParsed || !isDiastolicParsed)
 			{
-				pressureToolTip->Show("Введите корректное \nзначение", pressureMaskedTextBox, 0, 20, 5000);
+				pressureToolTip->Show("Р’РІРµРґРёС‚Рµ РєРѕСЂСЂРµРєС‚РЅРѕРµ \nР·РЅР°С‡РµРЅРёРµ", pressureMaskedTextBox, 0, 20, 5000);
 				isInputValide = false;
 			}
 			if (!isPulseParsed)
 			{
-				pulseToolTip->Show("Введите значение", pulseMaskedTextBox, 25, 20, 5000);
+				pulseToolTip->Show("Р’РІРµРґРёС‚Рµ Р·РЅР°С‡РµРЅРёРµ", pulseMaskedTextBox, 25, 20, 5000);
 				isInputValide = false;
 			}
 
-			// Проверка индекса вставки
+			// РџСЂРѕРІРµСЂРєР° РёРЅРґРµРєСЃР° РІСЃС‚Р°РІРєРё
 			int insertIndex;
 			auto isInsertIndexNumber = int::TryParse(insertIndexComboBox->Text, insertIndex);
 
 			if (!isInsertIndexNumber)
 			{
-				if (insertIndexComboBox->Text->Equals("Начало"))
+				if (insertIndexComboBox->Text->Equals("РќР°С‡Р°Р»Рѕ"))
 				{
 					insertIndex = 0;
 				}
-				else if (insertIndexComboBox->Text->Equals("Конец"))
+				else if (insertIndexComboBox->Text->Equals("РљРѕРЅРµС†"))
 				{
 					insertIndex = _parentEntryList->Count;
 				}
 				else
 				{
-					auto errorStr = String::Format("Введите значение в пределах \nот 0 до {0} включительно", _parentEntryList->Count);
+					auto errorStr = String::Format("Р’РІРµРґРёС‚Рµ Р·РЅР°С‡РµРЅРёРµ РІ РїСЂРµРґРµР»Р°С… \nРѕС‚ 0 РґРѕ {0} РІРєР»СЋС‡РёС‚РµР»СЊРЅРѕ", _parentEntryList->Count);
 
 					insertIndexToolTip->Show(errorStr, insertIndexComboBox, 0, 20, 5000);
 					isInputValide = false;
@@ -519,14 +519,14 @@ namespace Sketch {
 				if (insertIndex > _parentEntryList->Count ||
 					insertIndex < 0)
 				{
-					auto errorStr = String::Format("Введите значение в пределах \nот 0 до {0} включительно", _parentEntryList->Count);
+					auto errorStr = String::Format("Р’РІРµРґРёС‚Рµ Р·РЅР°С‡РµРЅРёРµ РІ РїСЂРµРґРµР»Р°С… \nРѕС‚ 0 РґРѕ {0} РІРєР»СЋС‡РёС‚РµР»СЊРЅРѕ", _parentEntryList->Count);
 
 					insertIndexToolTip->Show(errorStr, insertIndexComboBox, 0, 20, 5000);
 					isInputValide = false;
 				}
 			}
 
-			// Если ввод проверен, получаем все введённые значения
+			// Р•СЃР»Рё РІРІРѕРґ РїСЂРѕРІРµСЂРµРЅ, РїРѕР»СѓС‡Р°РµРј РІСЃРµ РІРІРµРґС‘РЅРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ
 			if (isInputValide)
 			{
 				auto recordDate = recordDateTimePicker->Value;
@@ -549,7 +549,7 @@ namespace Sketch {
 		}
 
 	/// <summary>
-	/// Добавление записи в таблицу и список.
+	/// Р”РѕР±Р°РІР»РµРЅРёРµ Р·Р°РїРёСЃРё РІ С‚Р°Р±Р»РёС†Сѓ Рё СЃРїРёСЃРѕРє.
 	/// </summary>
 	private: System::Void addAndExitButton_Click(System::Object^ sender, System::EventArgs^ e) 
 	{

@@ -5,21 +5,22 @@
 namespace Sketch {
 
 	using namespace System;
+	using namespace System::IO;
 	using namespace System::ComponentModel;
 	using namespace System::Collections::Generic;
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace Utility;
 
-	/// <summary>
-	/// Summary for MainForm
-	/// </summary>
 	public ref class MainForm : public System::Windows::Forms::Form
 	{
 		/// <summary>
 		/// Счётчик новых вкладок для добавления нумерации в их названия.
+		/// Используется при создании новых файлов как стандартное имя.
 		/// </summary>
 		int newTabPageCounter = 1;
+
 	public:
 		MainForm(void)
 		{
@@ -43,10 +44,14 @@ namespace Sketch {
 	private: System::Windows::Forms::ToolStripMenuItem^ openFileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ saveFileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ filtersToolStripMenu;
+	private: System::Windows::Forms::ToolStripMenuItem^ pressureFilterToolStripMenuItem;
 
-	private: System::Windows::Forms::ToolStripMenuItem^ давлениеToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ состояниеЗдоровьяToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ пульсToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ healthStateFilterToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ pulseFilterToolStripMenuItem;
+
+
+
+
 	private: System::Windows::Forms::ToolStripMenuItem^ additionalToolStripMenu;
 
 
@@ -63,6 +68,8 @@ namespace Sketch {
 	private: System::Windows::Forms::Button^ openFileButton;
 	private: System::Windows::Forms::OpenFileDialog^ openFileDialog;
 	private: System::Windows::Forms::Label^ welcomeLabel;
+	private: System::Windows::Forms::ToolStripMenuItem^ saveAsToolStripMenuItem;
+	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog;
 
 	private:
 		System::ComponentModel::Container ^components;
@@ -85,20 +92,22 @@ namespace Sketch {
 			this->newFileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openFileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->saveFileToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->saveAsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->filtersToolStripMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->давлениеToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->pressureFilterToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->утреннееToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->дневноеToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->вечернееToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->состояниеЗдоровьяToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->healthStateFilterToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->удовлетворительноToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->неудовлетворительноToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->пульсToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->pulseFilterToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->выше120ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->additionalToolStripMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->графикДавленияЗаПоследние30ДнейToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->mainTabControl->SuspendLayout();
 			this->initialTabPage->SuspendLayout();
 			this->initialPanel->SuspendLayout();
@@ -195,9 +204,9 @@ namespace Sketch {
 			// 
 			// fileToolStripMenu
 			// 
-			this->fileToolStripMenu->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->fileToolStripMenu->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
 				this->newFileToolStripMenuItem,
-					this->openFileToolStripMenuItem, this->saveFileToolStripMenuItem
+					this->openFileToolStripMenuItem, this->saveFileToolStripMenuItem, this->saveAsToolStripMenuItem
 			});
 			this->fileToolStripMenu->Name = L"fileToolStripMenu";
 			this->fileToolStripMenu->Size = System::Drawing::Size(53, 23);
@@ -225,26 +234,34 @@ namespace Sketch {
 			this->saveFileToolStripMenuItem->Text = L"Сохранить";
 			this->saveFileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveFileToolStripMenuItem_Click);
 			// 
+			// saveAsToolStripMenuItem
+			// 
+			this->saveAsToolStripMenuItem->Enabled = false;
+			this->saveAsToolStripMenuItem->Name = L"saveAsToolStripMenuItem";
+			this->saveAsToolStripMenuItem->Size = System::Drawing::Size(180, 24);
+			this->saveAsToolStripMenuItem->Text = L"Сохранить как";
+			this->saveAsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveAsToolStripMenuItem_Click);
+			// 
 			// filtersToolStripMenu
 			// 
 			this->filtersToolStripMenu->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
-				this->давлениеToolStripMenuItem,
-					this->состояниеЗдоровьяToolStripMenuItem, this->пульсToolStripMenuItem
+				this->pressureFilterToolStripMenuItem,
+					this->healthStateFilterToolStripMenuItem, this->pulseFilterToolStripMenuItem
 			});
 			this->filtersToolStripMenu->Enabled = false;
 			this->filtersToolStripMenu->Name = L"filtersToolStripMenu";
 			this->filtersToolStripMenu->Size = System::Drawing::Size(77, 23);
 			this->filtersToolStripMenu->Text = L"Фильтры";
 			// 
-			// давлениеToolStripMenuItem
+			// pressureFilterToolStripMenuItem
 			// 
-			this->давлениеToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+			this->pressureFilterToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
 				this->утреннееToolStripMenuItem,
 					this->дневноеToolStripMenuItem, this->вечернееToolStripMenuItem
 			});
-			this->давлениеToolStripMenuItem->Name = L"давлениеToolStripMenuItem";
-			this->давлениеToolStripMenuItem->Size = System::Drawing::Size(208, 24);
-			this->давлениеToolStripMenuItem->Text = L"Давление";
+			this->pressureFilterToolStripMenuItem->Name = L"pressureFilterToolStripMenuItem";
+			this->pressureFilterToolStripMenuItem->Size = System::Drawing::Size(208, 24);
+			this->pressureFilterToolStripMenuItem->Text = L"Давление";
 			// 
 			// утреннееToolStripMenuItem
 			// 
@@ -264,15 +281,15 @@ namespace Sketch {
 			this->вечернееToolStripMenuItem->Size = System::Drawing::Size(138, 24);
 			this->вечернееToolStripMenuItem->Text = L"Вечернее";
 			// 
-			// состояниеЗдоровьяToolStripMenuItem
+			// healthStateFilterToolStripMenuItem
 			// 
-			this->состояниеЗдоровьяToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
+			this->healthStateFilterToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
 				this->удовлетворительноToolStripMenuItem,
 					this->неудовлетворительноToolStripMenuItem
 			});
-			this->состояниеЗдоровьяToolStripMenuItem->Name = L"состояниеЗдоровьяToolStripMenuItem";
-			this->состояниеЗдоровьяToolStripMenuItem->Size = System::Drawing::Size(208, 24);
-			this->состояниеЗдоровьяToolStripMenuItem->Text = L"Состояние здоровья";
+			this->healthStateFilterToolStripMenuItem->Name = L"healthStateFilterToolStripMenuItem";
+			this->healthStateFilterToolStripMenuItem->Size = System::Drawing::Size(208, 24);
+			this->healthStateFilterToolStripMenuItem->Text = L"Состояние здоровья";
 			// 
 			// удовлетворительноToolStripMenuItem
 			// 
@@ -286,12 +303,12 @@ namespace Sketch {
 			this->неудовлетворительноToolStripMenuItem->Size = System::Drawing::Size(219, 24);
 			this->неудовлетворительноToolStripMenuItem->Text = L"Неудовлетворительно";
 			// 
-			// пульсToolStripMenuItem
+			// pulseFilterToolStripMenuItem
 			// 
-			this->пульсToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->выше120ToolStripMenuItem });
-			this->пульсToolStripMenuItem->Name = L"пульсToolStripMenuItem";
-			this->пульсToolStripMenuItem->Size = System::Drawing::Size(208, 24);
-			this->пульсToolStripMenuItem->Text = L"Пульс";
+			this->pulseFilterToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->выше120ToolStripMenuItem });
+			this->pulseFilterToolStripMenuItem->Name = L"pulseFilterToolStripMenuItem";
+			this->pulseFilterToolStripMenuItem->Size = System::Drawing::Size(208, 24);
+			this->pulseFilterToolStripMenuItem->Text = L"Пульс";
 			// 
 			// выше120ToolStripMenuItem
 			// 
@@ -324,7 +341,13 @@ namespace Sketch {
 			// 
 			// openFileDialog
 			// 
-			this->openFileDialog->FileName = L"openFileDialog1";
+			this->openFileDialog->DefaultExt = L"bin";
+			this->openFileDialog->Filter = L"Бинарные файлы|*.bin";
+			// 
+			// saveFileDialog
+			// 
+			this->saveFileDialog->DefaultExt = L"bin";
+			this->saveFileDialog->Filter = L"Бинарные файлы|*.bin";
 			// 
 			// MainForm
 			// 
@@ -353,7 +376,72 @@ namespace Sketch {
 		}
 #pragma endregion
 
-		
+		/// <summary>
+		/// Вывод MessageBox с ошибкой сохранения пустого файла.
+		/// </summary>
+		void ShowFileSaveErrorMessage() {
+			MessageBox::Show(this, "Чтобы сохранить файл, в нём должна находится хотя бы одна запись.", "Не удалось сохранить файл",
+				MessageBoxButtons::OK,
+				MessageBoxIcon::Stop);
+		}
+
+		/// <summary>
+		/// Получить относительный путь файла из полного пути <paramref name="fullFilePath"/>.
+		/// </summary>
+		String^ GetRelativeFilePath(String^ fullFilePath) 
+		{
+			// Высчитываем необходимые значения для получения
+			// относительного имени файла
+			int fileNameBeginningIndex = fullFilePath->LastIndexOf("\\") + 1;
+			int extensionIndex = fullFilePath->LastIndexOf(".");
+			int fileNameLength = extensionIndex - fileNameBeginningIndex;
+
+			// Получаем относительное имя файла
+			return fullFilePath->Substring(fileNameBeginningIndex, fileNameLength);
+		}
+
+		/// <summary>
+		/// Создание новой вкладки с текстом <paramref name="tabPageText"/> и таблицей, сохранённой по пути <paramref name="filePath"/>.
+		/// </summary>
+		void AddNewTabPageWithNewTable(String^ tabPageText, String^ filePath)
+		{
+			// Создаём новую вкладку с текстом - названием файла
+			TabPage^ newTabPage = gcnew TabPage(tabPageText);
+
+			newTabPage->Name = String::Format("{0}TabPage", tabPageText);
+
+			// Создаём новую таблицу из файла, добавляем её во вкладку
+			EntryTableUserControl^ entryTable = gcnew EntryTableUserControl(filePath);
+			entryTable->Dock = DockStyle::Fill;
+			newTabPage->Controls->Add(entryTable);
+
+			// Добавляем и выбираем новую вкладку
+			mainTabControl->TabPages->Add(newTabPage);
+			mainTabControl->SelectTab(newTabPage->Name);
+		}
+
+		/// <summary>
+		/// Удалить вкладку уже открытого файл в случае его перезаписи
+		/// с другой таблицей. При этом выбранная вкладка переименовывается 
+		/// его именем.
+		/// </summary>
+		void RemoveOverwritedFileTab(String^ pathToOverwritedFile) 
+		{
+			String^ overwritedFileName = GetRelativeFilePath(pathToOverwritedFile);
+			// Проверка на открытую вкладку перезаписываемого файла.
+			// Закрываем её, если она есть.
+			for (size_t i = 0; i < mainTabControl->TabCount; i++)
+			{
+				if (i != mainTabControl->SelectedIndex &&
+					mainTabControl->TabPages[i]->Text->Equals(overwritedFileName))
+				{
+					mainTabControl->TabPages->RemoveAt(i);
+				}
+			}
+			mainTabControl->SelectedTab->ResetText();
+			mainTabControl->SelectedTab->Text = overwritedFileName;
+		}
+
 /// <summary>
 ///  Создание новой вкладки для нового файла
 /// </summary>
@@ -370,7 +458,6 @@ private: System::Void createNewFileButton_Click(System::Object^ sender, System::
 		// Создаём в ней пустую таблицу, добавляем вкладку 
 		// в mainTabControl и открываем
 		EntryTableUserControl^ entryTable = gcnew EntryTableUserControl();
-		entryTable->Dock = DockStyle::Fill;
 		newTabPage->Controls->Add(entryTable);
 
 		mainTabControl->TabPages->Add(newTabPage);
@@ -379,12 +466,12 @@ private: System::Void createNewFileButton_Click(System::Object^ sender, System::
 		newTabPageCounter++;
 	}
 
-		// TODO: СОБЫТИЕ - НАЖАТИЕ ПКМ НА TABPAGE 
-		// С ВЫВОДОМ СПИСКА: УДАЛИТЬ, ПЕРЕИМЕНОВАТЬ
+// TODO: СОБЫТИЕ - НАЖАТИЕ ПКМ НА TABPAGE 
+// С ВЫВОДОМ СПИСКА: УДАЛИТЬ, ПЕРЕИМЕНОВАТЬ
 
 
 /// <summary>
-/// Делаем активными/неактивными опции меню, которые нужны только для открытого файла	
+/// Делаем активными/неактивными опции меню, которые нужны только для открытого файла
 /// </summary>
 private: System::Void mainTabControl_Selected(System::Object^ sender, System::Windows::Forms::TabControlEventArgs^ e) 
 {
@@ -392,12 +479,14 @@ private: System::Void mainTabControl_Selected(System::Object^ sender, System::Wi
 	if (e->TabPage->Name == "initialTabPage")
 	{
 		saveFileToolStripMenuItem->Enabled = false;
+		saveAsToolStripMenuItem->Enabled = false;
 		filtersToolStripMenu->Enabled = false;
 		additionalToolStripMenu->Enabled = false;
 	}
 	else
 	{
 		saveFileToolStripMenuItem->Enabled = true;
+		saveAsToolStripMenuItem->Enabled = true;
 		filtersToolStripMenu->Enabled = true;
 		additionalToolStripMenu->Enabled = true;
 	}
@@ -413,31 +502,134 @@ private: System::Void openFileButton_Click(System::Object^ sender, System::Event
 		return;
 	}
 
-	// Высчитываем необходимые значения для получения
-	// относительного имени файла
-	int fileNameBeginningIndex = openFileDialog->FileName->LastIndexOf("\\") + 1;
-	int extensionIndex = openFileDialog->FileName->LastIndexOf(".");
-	int fileNameLength = extensionIndex - fileNameBeginningIndex;
-
 	// Получаем относительное имя файла
-	String^ fileName = openFileDialog->FileName->Substring(fileNameBeginningIndex, fileNameLength);
+	String^ fileName = GetRelativeFilePath(openFileDialog->FileName);
 
-	// Создаём новую вкладку с текстом - названием файла
-	// и выбираем её
-	String^ newTabPageName = String::Format("{0}TabPage",  fileName);
-	TabPage^ newTabPage = gcnew TabPage(fileName);
-	newTabPage->Name = String::Format(newTabPageName);
+	// Проверка на наличие уже открытого этого же файла
+	for (size_t i = 0; i < mainTabControl->TabCount; i++)
+	{
+		auto currentTable = (EntryTableUserControl^)mainTabControl->TabPages[i]->Controls["EntryTableUserControl"];
+		if (currentTable != nullptr)
+		{
+			// ЕСЛИ создать новую вкладу "1" с именем "Безымянный1" и 
+			// попробовать открыть другой файл с таким именем, откроется
+			// ещё одна вкладка "2" с таким же именем "Безымянный1".
+			// Скорее всего надо предлагать сохранять вкладку "1", и дальше 
+			// что-нибудь ещё делать, может быть закрывать её и открывать "2"
+			if (openFileDialog->FileName->Equals(currentTable->SavedFilePath))
+			{
+				MessageBox::Show(this,
+					String::Format("Файл {0} уже открыт.", fileName),
+					"Ошибка открытия файла",
+					MessageBoxButtons::OK,
+					MessageBoxIcon::Stop);
+				return;
+			}
+		}
+		
+	}
 
-	mainTabControl->TabPages->Add(newTabPage);
-	mainTabControl->SelectTab(newTabPageName);
-
-	// TODO: ЗАПОЛНЕНИЕ ТАБЛИЦЫ ДАННЫМИ ИЗ ФАЙЛА
-	// И ДОБАВИТЬ ФИЛЬТР НА РАСШИРЕНИЕ
+	AddNewTabPageWithNewTable(fileName, openFileDialog->FileName);
 }
+
 /// <summary>
-/// Сохранить файл.
+/// Сохранение файла.
 /// </summary>
 private: System::Void saveFileToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	auto currentTable = (EntryTableUserControl^)mainTabControl->SelectedTab->Controls["EntryTableUserControl"];
+
+	// Если файл ни разу не сохраняли, создаём его через
+	// диалог сохранения файла для выбора пути
+	if (!currentTable->IsSavedOnce)
+	{
+		// Если таблица заполнена, создаём файл
+		if (currentTable->IsFilled)
+		{
+			// В качестве стандартного имени выбираем имя закладки
+			saveFileDialog->FileName = mainTabControl->SelectedTab->Text;
+
+			if (saveFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::Cancel)
+			{
+				return;
+			}
+
+			String^ filePath = saveFileDialog->FileName;
+
+			// Если перезапись файла, то меняем текст вкладки на имя
+			// перезаписываемого файла
+			if (File::Exists(filePath))
+			{
+				RemoveOverwritedFileTab(filePath);
+			}
+			
+			// Меняем название вкладки на название сохранённого файла
+			mainTabControl->SelectedTab->ResetText();
+			mainTabControl->SelectedTab->Text = GetRelativeFilePath(filePath);
+			currentTable->CreateFileWithTable(filePath);
+		}
+		// Если не заполнена, выбрасываем сообщение
+		else
+		{
+			ShowFileSaveErrorMessage();
+		}
+	}
+	// Иначе сохраняем изменённую таблицу в тот же файл
+	// без вызова диалога
+	else
+	{
+		if (currentTable->IsFilled)
+		{
+			currentTable->SaveTableToFile();
+		}
+		else
+		{
+			ShowFileSaveErrorMessage();
+		}
+	}
+}
+
+/// <summary>
+/// Сохранение файла с другими параметрами (другой путь, имя).
+/// </summary>
+private: System::Void saveAsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
+{
+	auto currentTable = (EntryTableUserControl^)mainTabControl->SelectedTab->Controls["EntryTableUserControl"];
+
+	if (currentTable->IsFilled)
+	{
+		// В качестве стандартного имени выбираем имя закладки
+		saveFileDialog->FileName = mainTabControl->SelectedTab->Text;
+
+		if (saveFileDialog->ShowDialog() == System::Windows::Forms::DialogResult::Cancel)
+		{
+			return;
+		}
+
+		String^ filePath = saveFileDialog->FileName;
+		String^ fileName = GetRelativeFilePath(filePath);
+
+		// Если выбрана перезапись файла, то новую вкладку не надо создавать
+		if (File::Exists(filePath))
+		{
+			// Проверка на уже открытый перезаписываемый файл. Его вкладку надо закрывать
+			RemoveOverwritedFileTab(filePath);
+			currentTable->CreateFileWithTable(filePath);
+			return;
+		}
+
+		// Создаём файл с новым расположением
+		currentTable->CreateFileWithTable(filePath);
+
+		// Закрываем безымянную вкладку
+		mainTabControl->TabPages->RemoveAt(mainTabControl->SelectedIndex);
+		// И создаём новую с выбранным именем
+		AddNewTabPageWithNewTable(fileName, filePath);
+	}
+	else
+	{
+		ShowFileSaveErrorMessage();
+	}
 }
 };
 }

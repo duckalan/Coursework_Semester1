@@ -5,6 +5,7 @@ namespace Sketch
 	/// <summary>
 	/// Период времени, когда была создана запись давления.
 	/// </summary>
+	[Serializable]
 	public enum class TimePeriod
 	{
 		// Используются русские названия, потому что

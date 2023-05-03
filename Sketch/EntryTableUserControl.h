@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include "HealthEntry.h"
 #include "EntryEditorForm.h"
 
@@ -8,18 +8,37 @@ using namespace System::Collections::Generic;
 using namespace System::Windows::Forms;
 using namespace System::Data;
 using namespace System::Drawing;
+using namespace Utility;
 
 
 namespace Sketch {
 
+	
 	/// <summary>
-	/// Контрол для таблицы с записями и возможностями для их редактирования.
+	/// РљРѕРЅС‚СЂРѕР» РґР»СЏ С‚Р°Р±Р»РёС†С‹ СЃ Р·Р°РїРёСЃСЏРјРё Рё РІРѕР·РјРѕР¶РЅРѕСЃС‚СЏРјРё РґР»СЏ РёС… СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ.
 	/// </summary>
 	public ref class EntryTableUserControl : public System::Windows::Forms::UserControl
 	{
+		/// <summary>
+		/// РЎРѕРґРµСЂР¶РёС‚СЃСЏ Р»Рё РІ С‚Р°Р±Р»РёС†Рµ С…РѕС‚СЏ Р±С‹ РѕРґРЅР° Р·Р°РїРёСЃСЊ.
+		/// РќРµРѕР±С…РѕРґРёРјРѕ РґР»СЏ РјРµС‚РѕРґРѕРІ СЃРѕС…СЂР°РЅРµРЅРёСЏ С‚Р°Р±Р»РёС†С‹.
+		/// </summary>
+		bool _isFilled = false;
+
+		/// <summary>
+		/// Р‘С‹Р»Р° Р»Рё С‚Р°Р±Р»РёС†Р° СѓР¶Рµ СЃРѕС…СЂР°РЅРµРЅР° С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ СЂР°Р·.
+		/// </summary>
+		bool _isSavedOnce = false;
+
+		/// <summary>
+		/// РџСѓС‚СЊ С„Р°Р№Р»Р°, РІ РєРѕС‚РѕСЂРѕРј СЃРѕС…СЂР°РЅРµРЅР° С‚Р°Р±Р»РёС†Р°. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РґР»СЏ РјРЅРѕРіРѕСЂР°Р·РѕРІРѕРіРѕ
+		/// СЃРѕС…СЂР°РЅРµРЅРёСЏ С‚Р°Р±Р»РёС†С‹ Р±РµР· Р»РёС€РЅРёС… РІС‹Р·РѕРІРѕРІ РґРёР°Р»РѕРіР° СЃРѕС…СЂР°РЅРµРЅРёСЏ.
+		/// </summary>
+		String^ _createdFilePath = nullptr;
+
 	public:
 		/// <summary>
-		/// Создание пустой таблицы.
+		/// РЎРѕР·РґР°РЅРёРµ РїСѓСЃС‚РѕР№ С‚Р°Р±Р»РёС†С‹.
 		/// </summary>
 		EntryTableUserControl(void)
 		{
@@ -27,20 +46,75 @@ namespace Sketch {
 			EntryList = gcnew BindingList<HealthEntry^>();
 			mainDataGridView->DataSource = EntryList;
 
-			AdjustBindedColums();
+			AdjustBindedColumns();
 		}
 
 		/// <summary>
-		/// Создание таблицы из уже существующего списка (например, из файла).
+		/// РЎРѕР·РґР°РЅРёРµ С‚Р°Р±Р»РёС†С‹ РёР· СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ СЃРїРёСЃРєР° РёР· С„Р°Р№Р»Р° РїРѕ РїСѓС‚Рё
+		/// <paramref name="filePath"/>.
 		/// </summary>
-		EntryTableUserControl(BindingList<HealthEntry^>^ entryList)
+		EntryTableUserControl(String^ filePath)
 		{
 			InitializeComponent();
-			EntryList = entryList;
+
+			EntryList = Utility::BinaryFileManager::Load<BindingList<HealthEntry^>^>(filePath);
 			mainDataGridView->DataSource = EntryList;
+			_isFilled = true;
+			_isSavedOnce = true;
+			_createdFilePath = filePath;
+			AdjustBindedColumns();
 		}
 
 		property BindingList<HealthEntry^>^ EntryList;
+
+		/// <summary>
+		/// РџСѓС‚СЊ С„Р°Р№Р»Р°, РІ РєРѕС‚РѕСЂРѕРј СЃРѕС…СЂР°РЅРµРЅР° С‚Р°Р±Р»РёС†Р°.
+		/// </summary>
+		property String^ SavedFilePath 
+		{
+			String^ get() { return _createdFilePath; }
+		}
+
+		/// <summary>
+		/// Р‘С‹Р»Р° Р»Рё С‚Р°Р±Р»РёС†Р° С…РѕС‚СЏ Р±С‹ РѕРґРёРЅ СЂР°Р· СѓР¶Рµ СЃРѕС…СЂР°РЅРµРЅР° РІ С„Р°Р№Р».
+		/// </summary>
+		property bool IsSavedOnce 
+		{
+			bool get() { return _isSavedOnce; }
+		}
+
+		/// <summary>
+		/// РЎРѕРґРµСЂР¶РёС‚ Р»Рё С‚Р°Р±Р»РёС†Р° С…РѕС‚СЏ Р±С‹ РѕРґРЅСѓ Р·Р°РїРёСЃСЊ.
+		/// </summary>
+		property bool IsFilled 
+		{
+			bool get() { return _isFilled; }
+		}
+
+		/// <summary>
+		/// РЎРѕР·РґР°РЅРёРµ С„Р°Р№Р»Р° РїРѕ РїСѓС‚Рё <paramref name="filePath"/> СЃ С‚РµРєСѓС‰РµР№ С‚Р°Р±Р»РёС†РµР№. РџСЂРё СЌС‚РѕРј СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ РїСѓС‚СЊ СЌС‚РѕРіРѕ С„Р°Р№Р»Р°.
+		/// </summary>
+		void CreateFileWithTable(String^ filePath) 
+		{
+			_createdFilePath = filePath;
+			_isSavedOnce = true;
+			Utility::BinaryFileManager::Save(filePath, EntryList);
+		}
+
+		/// <summary>
+		/// РЎРѕС…СЂР°РЅРµРЅРёРµ С‚Р°Р±Р»РёС†С‹ РІ СѓР¶Рµ РѕС‚РєСЂС‹С‚РѕРј С„Р°Р№Р»Рµ. РСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ СЃРѕС…СЂР°РЅС‘РЅРЅС‹Р№ РїСЂРё СЃРѕР·РґР°РЅРёРё С‚Р°Р±Р»РёС†С‹ (РёР»Рё Р»СЋР±РѕРј РѕС‚РєСЂС‹С‚РёРё) РїСѓС‚СЊ.
+		/// </summary>
+		void SaveTableToFile() 
+		{
+			if (IsSavedOnce)
+			{
+				Utility::BinaryFileManager::Save(SavedFilePath, EntryList);
+			}
+			else
+			{
+				throw gcnew Exception("РЎРѕС…СЂР°РЅСЏРµРјС‹Р№ С„Р°Р№Р» РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ СЃРѕС…СЂР°РЅС‘РЅ РІРїРµСЂРІС‹Рµ.");
+			}
+		}
 
 	protected:
 		~EntryTableUserControl()
@@ -61,7 +135,7 @@ namespace Sketch {
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->tableLayoutPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->deleteEntryButton = (gcnew System::Windows::Forms::Button());
 			this->editEntryButton = (gcnew System::Windows::Forms::Button());
@@ -102,7 +176,7 @@ namespace Sketch {
 			this->deleteEntryButton->Name = L"deleteEntryButton";
 			this->deleteEntryButton->Size = System::Drawing::Size(154, 51);
 			this->deleteEntryButton->TabIndex = 3;
-			this->deleteEntryButton->Text = L"Удалить";
+			this->deleteEntryButton->Text = L"РЈРґР°Р»РёС‚СЊ";
 			this->deleteEntryButton->UseVisualStyleBackColor = true;
 			this->deleteEntryButton->SizeChanged += gcnew System::EventHandler(this, &EntryTableUserControl::buttons_SizeChanged);
 			this->deleteEntryButton->Click += gcnew System::EventHandler(this, &EntryTableUserControl::deleteEntryButton_Click);
@@ -115,7 +189,7 @@ namespace Sketch {
 			this->editEntryButton->Name = L"editEntryButton";
 			this->editEntryButton->Size = System::Drawing::Size(154, 49);
 			this->editEntryButton->TabIndex = 2;
-			this->editEntryButton->Text = L"Редактировать";
+			this->editEntryButton->Text = L"Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ";
 			this->editEntryButton->UseVisualStyleBackColor = true;
 			this->editEntryButton->SizeChanged += gcnew System::EventHandler(this, &EntryTableUserControl::buttons_SizeChanged);
 			this->editEntryButton->Click += gcnew System::EventHandler(this, &EntryTableUserControl::editEntryButton_Click);
@@ -125,15 +199,15 @@ namespace Sketch {
 			this->mainDataGridView->AllowUserToAddRows = false;
 			this->mainDataGridView->AllowUserToDeleteRows = false;
 			this->mainDataGridView->AllowUserToResizeColumns = false;
-			dataGridViewCellStyle2->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
-			dataGridViewCellStyle2->BackColor = System::Drawing::SystemColors::Control;
-			dataGridViewCellStyle2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+			dataGridViewCellStyle1->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleCenter;
+			dataGridViewCellStyle1->BackColor = System::Drawing::SystemColors::Control;
+			dataGridViewCellStyle1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
-			dataGridViewCellStyle2->ForeColor = System::Drawing::SystemColors::WindowText;
-			dataGridViewCellStyle2->SelectionBackColor = System::Drawing::SystemColors::Highlight;
-			dataGridViewCellStyle2->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
-			dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
-			this->mainDataGridView->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle1->ForeColor = System::Drawing::SystemColors::WindowText;
+			dataGridViewCellStyle1->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle1->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
+			this->mainDataGridView->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this->mainDataGridView->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->mainDataGridView->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->mainDataGridView->Location = System::Drawing::Point(177, 3);
@@ -145,6 +219,8 @@ namespace Sketch {
 			this->mainDataGridView->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
 			this->mainDataGridView->Size = System::Drawing::Size(690, 293);
 			this->mainDataGridView->TabIndex = 0;
+			this->mainDataGridView->RowsAdded += gcnew System::Windows::Forms::DataGridViewRowsAddedEventHandler(this, &EntryTableUserControl::mainDataGridView_RowsAdded);
+			this->mainDataGridView->RowsRemoved += gcnew System::Windows::Forms::DataGridViewRowsRemovedEventHandler(this, &EntryTableUserControl::mainDataGridView_RowsRemoved);
 			// 
 			// addEntryButton
 			// 
@@ -154,7 +230,7 @@ namespace Sketch {
 			this->addEntryButton->Name = L"addEntryButton";
 			this->addEntryButton->Size = System::Drawing::Size(154, 49);
 			this->addEntryButton->TabIndex = 1;
-			this->addEntryButton->Text = L"Создать";
+			this->addEntryButton->Text = L"РЎРѕР·РґР°С‚СЊ";
 			this->addEntryButton->UseVisualStyleBackColor = true;
 			this->addEntryButton->SizeChanged += gcnew System::EventHandler(this, &EntryTableUserControl::buttons_SizeChanged);
 			this->addEntryButton->Click += gcnew System::EventHandler(this, &EntryTableUserControl::addEntryButton_Click);
@@ -177,9 +253,9 @@ namespace Sketch {
 
 private:
 		/// <summary>
-		/// Визуально настраиваем столбцы, создающиеся при биндинге.
+		/// Р’РёР·СѓР°Р»СЊРЅРѕ РЅР°СЃС‚СЂР°РёРІР°РµРј СЃС‚РѕР»Р±С†С‹, СЃРѕР·РґР°СЋС‰РёРµСЃСЏ РїСЂРё Р±РёРЅРґРёРЅРіРµ.
 		/// </summary>
-		System::Void AdjustBindedColums() 
+		System::Void AdjustBindedColumns() 
 		{
 			mainDataGridView->Columns["RecordDate"]->MinimumWidth = 105;
 			mainDataGridView->Columns["RecordDate"]->Width = 105;
@@ -213,16 +289,15 @@ private:
 		}
 
 		/// <summary>
-		/// Адаптируем все шрифты под изменение длины и ширины формы.
+		/// РђРґР°РїС‚РёСЂСѓРµРј РІСЃРµ С€СЂРёС„С‚С‹ РїРѕРґ РёР·РјРµРЅРµРЅРёРµ РґР»РёРЅС‹ Рё С€РёСЂРёРЅС‹ С„РѕСЂРјС‹.
 		/// </summary>
-		/// С КНОПКАМИ НЕДОДЕЛАНО!!!!
 		System::Void buttons_SizeChanged(System::Object^ sender, System::EventArgs^ e) 
 	{
-		// Экспериментально подобранный коэффициент
+		// Р­РєСЃРїРµСЂРёРјРµРЅС‚Р°Р»СЊРЅРѕ РїРѕРґРѕР±СЂР°РЅРЅС‹Р№ РєРѕСЌС„С„РёС†РёРµРЅС‚
 		const float buttonWidthScale = .08f;
 		const float headerCellsWidthScale = .06f;
 
-		// Новый шрифт с другим кеглем для кнопок
+		// РќРѕРІС‹Р№ С€СЂРёС„С‚ СЃ РґСЂСѓРіРёРј РєРµРіР»РµРј РґР»СЏ РєРЅРѕРїРѕРє
 		auto newButtonFont = gcnew System::Drawing::Font(
 			addEntryButton->Font->FontFamily, 
 			Math::Floor(addEntryButton->Width * buttonWidthScale),
@@ -232,7 +307,7 @@ private:
 		editEntryButton->Font = newButtonFont;
 		deleteEntryButton->Font = newButtonFont;
 
-		// Новый шрифт с другим кеглем для заголовков столбцов
+		// РќРѕРІС‹Р№ С€СЂРёС„С‚ СЃ РґСЂСѓРіРёРј РєРµРіР»РµРј РґР»СЏ Р·Р°РіРѕР»РѕРІРєРѕРІ СЃС‚РѕР»Р±С†РѕРІ
 		auto newHeaderCellsFont = gcnew System::Drawing::Font(
 			addEntryButton->Font->FontFamily, 
 			(float)Math::Floor(Math::Max(addEntryButton->Width * headerCellsWidthScale, 10.f)), 
@@ -244,7 +319,7 @@ private:
 	}
 
 		/// <summary>
-		/// Вызов окна добавления записи.
+		/// Р’С‹Р·РѕРІ РѕРєРЅР° РґРѕР±Р°РІР»РµРЅРёСЏ Р·Р°РїРёСЃРё.
 		/// </summary>
 		private: System::Void addEntryButton_Click(System::Object^ sender, System::EventArgs^ e) 
 		{
@@ -254,7 +329,7 @@ private:
 		}
 	
 		/// <summary>
-		/// Удаление выделенных записей.
+		/// РЈРґР°Р»РµРЅРёРµ РІС‹РґРµР»РµРЅРЅС‹С… Р·Р°РїРёСЃРµР№.
 		/// </summary>
 		private: System::Void deleteEntryButton_Click(System::Object^ sender, System::EventArgs^ e) 
 		{
@@ -263,7 +338,7 @@ private:
 				auto tip = gcnew ToolTip();
 				tip->AutomaticDelay = 100;
 				tip->Show(
-						"Выберите удаляемые строки путём перемещения\nмыши вдоль таблицы с зажатой левой кнопкой", 
+						"Р’С‹Р±РµСЂРёС‚Рµ СѓРґР°Р»СЏРµРјС‹Рµ СЃС‚СЂРѕРєРё РїСѓС‚С‘Рј РїРµСЂРµРјРµС‰РµРЅРёСЏ\nРјС‹С€Рё РІРґРѕР»СЊ С‚Р°Р±Р»РёС†С‹ СЃ Р·Р°Р¶Р°С‚РѕР№ Р»РµРІРѕР№ РєРЅРѕРїРєРѕР№", 
 						deleteEntryButton, 
 						deleteEntryButton->Width / 2, 
 						deleteEntryButton->Height / 2, 
@@ -272,16 +347,16 @@ private:
 			}
 			int selectedRowsCount = mainDataGridView->SelectedRows->Count;
 
-			// Подтверждаем удаление
+			// РџРѕРґС‚РІРµСЂР¶РґР°РµРј СѓРґР°Р»РµРЅРёРµ
 			auto isDeleteAccepted = MessageBox::Show(this,
-				String::Format("Вы точно хотите удалить выделенные ({0} шт) строки?", selectedRowsCount),
-				"Подтверждение удаления записей",
+				String::Format("Р’С‹ С‚РѕС‡РЅРѕ С…РѕС‚РёС‚Рµ СѓРґР°Р»РёС‚СЊ РІС‹РґРµР»РµРЅРЅС‹Рµ ({0} С€С‚) СЃС‚СЂРѕРєРё?", selectedRowsCount),
+				"РџРѕРґС‚РІРµСЂР¶РґРµРЅРёРµ СѓРґР°Р»РµРЅРёСЏ Р·Р°РїРёСЃРµР№",
 				MessageBoxButtons::YesNo, 
 				MessageBoxIcon::Warning);
 			
 			if (isDeleteAccepted == DialogResult::Yes)
 			{
-				// Удаляем с конца чтобы не возится с обновляемыми индексами
+				// РЈРґР°Р»СЏРµРј СЃ РєРѕРЅС†Р° С‡С‚РѕР±С‹ РЅРµ РІРѕР·РёС‚СЃСЏ СЃ РѕР±РЅРѕРІР»СЏРµРјС‹РјРё РёРЅРґРµРєСЃР°РјРё
 				for (int i = selectedRowsCount - 1; i >= 0; i--)
 				{
 					EntryList->RemoveAt(mainDataGridView->SelectedRows[i]->Index);
@@ -290,7 +365,7 @@ private:
 		}
 
 		/// <summary>
-		/// Вызов окна редактирования выделенной записи.
+		/// Р’С‹Р·РѕРІ РѕРєРЅР° СЂРµРґР°РєС‚РёСЂРѕРІР°РЅРёСЏ РІС‹РґРµР»РµРЅРЅРѕР№ Р·Р°РїРёСЃРё.
 		/// </summary>
 		private: System::Void editEntryButton_Click(System::Object^ sender, System::EventArgs^ e) 
 		{
@@ -299,7 +374,7 @@ private:
 				auto tip = gcnew ToolTip();
 				tip->AutomaticDelay = 100;
 				tip->Show(
-					"Выберите только одну строку путём нажатия на неё левой клавиши мыши",
+					"Р’С‹Р±РµСЂРёС‚Рµ С‚РѕР»СЊРєРѕ РѕРґРЅСѓ СЃС‚СЂРѕРєСѓ РїСѓС‚С‘Рј РЅР°Р¶Р°С‚РёСЏ РЅР° РЅРµС‘ Р»РµРІРѕР№ РєР»Р°РІРёС€Рё РјС‹С€Рё",
 					editEntryButton,
 					editEntryButton->Width / 2,
 					editEntryButton->Height / 2,
@@ -310,5 +385,26 @@ private:
 			auto editForm = gcnew EntryEditorForm(EntryList, mainDataGridView->SelectedRows[0]->Index);
 			editForm->ShowDialog();
 		}
-};
+
+		
+		/// <summary>
+		/// РћРїСЂРµРґРµР»СЏРµРј, РѕСЃС‚Р°Р»Р°СЃСЊ Р»Рё РІ С‚Р°Р±Р»РёС†Р° С…РѕС‚СЏ Р±С‹ РѕРґРЅР° Р·Р°РїРёСЃСЊ.
+		/// </summary>
+		private: System::Void mainDataGridView_RowsRemoved(System::Object^ sender, System::Windows::Forms::DataGridViewRowsRemovedEventArgs^ e) 
+		{
+			// Р•СЃР»Рё РµСЃС‚СЊ С‚РѕР»СЊРєРѕ 1 СЃС‚СЂРѕРєР° СЃ Р·Р°РіРѕР»РѕРІРєР°РјРё
+			if (e->RowCount == 1)
+			{
+				_isFilled = false;
+			}
+		}
+
+		/// <summary>
+		/// РџРѕРјРµС‡Р°РµРј, С‡С‚Рѕ РІ С‚Р°Р±Р»РёС†Рµ РµСЃС‚СЊ С…РѕС‚СЏ Р±С‹ РѕРґРЅР° Р·Р°РїРёСЃСЊ.
+		/// </summary>
+		private: System::Void mainDataGridView_RowsAdded(System::Object^ sender, System::Windows::Forms::DataGridViewRowsAddedEventArgs^ e) 
+	{
+		_isFilled = true;
+	}
+	};
 }
