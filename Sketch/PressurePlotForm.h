@@ -13,7 +13,7 @@ namespace Sketch {
 	using namespace System::Linq;
 
 	/// <summary>
-	/// Форма с графиком давления за последние 30 дней.
+	/// ����� � �������� �������� �� ��������� 30 ����.
 	/// </summary>
 	public ref class PressurePlotForm : public System::Windows::Forms::Form
 	{
@@ -26,7 +26,7 @@ namespace Sketch {
 			FilterEntriesFromInputList(inputList);
 			SortByDateTime(_filteredList);
 			
-			// Добавляем точки на график
+			// ��������� ����� �� ������
 			for (int i = 0; i < _filteredList->Count; i++)
 			{
 				auto entry = _filteredList[i];
@@ -82,7 +82,7 @@ namespace Sketch {
 			series1->ChartArea = L"ChartArea1";
 			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
 			series1->Legend = L"Legend1";
-			series1->LegendText = L"Систолическое давление";
+			series1->LegendText = L"������������� ��������";
 			series1->Name = L"systolicSeries";
 			series1->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
 			series2->BorderWidth = 3;
@@ -90,7 +90,7 @@ namespace Sketch {
 			series2->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
 			series2->Color = System::Drawing::Color::Red;
 			series2->Legend = L"Legend1";
-			series2->LegendText = L"Диастолическое давление";
+			series2->LegendText = L"�������������� ��������";
 			series2->Name = L"diastolicSeries";
 			series2->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
 			this->pressureChart->Series->Add(series1);
@@ -111,7 +111,7 @@ namespace Sketch {
 			this->MinimumSize = System::Drawing::Size(800, 600);
 			this->Name = L"PressurePlotForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"График давления за последние 30 дней";
+			this->Text = L"������ �������� �� ��������� 30 ����";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pressureChart))->EndInit();
 			this->ResumeLayout(false);
 
@@ -119,19 +119,19 @@ namespace Sketch {
 #pragma endregion
 
 		/// <summary>
-		/// Отфильтровываем только дневные записи за последние 30 дней
+		/// ��������������� ������ ������� ������ �� ��������� 30 ����
 		/// </summary>
 		void FilterEntriesFromInputList(BindingList<HealthEntry^>^ inputList) 
 		{
 			auto to = DateTime::Now;
-			// 30 дней назад
+			// 30 ���� �����
 			auto from = to.AddDays(-30);
 
 			for (int i = 0; i < inputList->Count; i++)
 			{
 				auto entry = inputList[i];
 				if (entry->RecordDate.Date >= from && entry->RecordDate.Date <= to &&
-					entry->RecordTimePeriod == TimePeriod::День)
+					entry->RecordTimePeriod == TimePeriod::����)
 				{
 					_filteredList->Add(entry);
 				}
@@ -139,7 +139,7 @@ namespace Sketch {
 		}
 
 		/// <summary>
-		/// Сортируем список по дате по возрастанию.
+		/// ��������� ������ �� ���� �� �����������.
 		/// </summary>
 		void SortByDateTime(List<HealthEntry^>^ filteredList)
 		{
