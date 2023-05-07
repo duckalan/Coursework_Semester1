@@ -11,19 +11,19 @@ namespace Sketch
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// ����� � ���������� ������������ ���������� ���� �����, ��������� � ����������.
+	/// Форма с процентным соотношением количества дней нормы, гипотонии и гипертонии.
 	/// </summary>
 	public ref class PressureRatioForm : public System::Windows::Forms::Form
 	{
 		BindingList<HealthEntry^>^ _entryList;
 
 		/// <summary>
-		/// ������� ������������� ��������.
+		/// Среднее систолическое давление.
 		/// </summary>
 		float _systolicAvg = 0;
 
 		/// <summary>
-		/// ������� �������������� ��������.
+		/// Среднее диастолическое давление.
 		/// </summary>
 		float _diastolicAvg = 0;
 
@@ -34,14 +34,14 @@ namespace Sketch
 			_entryList = inputList;
 			CalcAveragePressure();
 			
-			// ��������� �����
-			ratioChart->Series[0]->Points->AddXY("���������� ���� ����������", GetHypertensionPressureDayCount());
-			ratioChart->Series[0]->Points->AddXY("���������� ���� ���������", GetHypotensionPressureDayCount());
-			ratioChart->Series[0]->Points->AddXY("���������� ���� �����", GetNormalPressureDaysCount());
+			// Добавляем точки
+			ratioChart->Series[0]->Points->AddXY("Количество дней гипертонии", GetHypertensionPressureDayCount());
+			ratioChart->Series[0]->Points->AddXY("Количество дней гипотонии", GetHypotensionPressureDayCount());
+			ratioChart->Series[0]->Points->AddXY("Количество дней нормы", GetNormalPressureDaysCount());
 
-			// ���������� �������� Y � ���������
+			// Отображать значения Y в процентах
 			ratioChart->Series[0]->Label = "#PERCENT{P}";
-			// � ������� ���������� �������� �� X
+			// В легенде отображать значения по X
 			ratioChart->Series[0]->LegendText = "#VALX"; 
 
 		}
@@ -110,7 +110,7 @@ namespace Sketch
 			this->MinimumSize = System::Drawing::Size(800, 600);
 			this->Name = L"PressureRatioForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"PressureRatioForm";
+			this->Text = L"График процентного соотношения количества дней гипертонии, гипотони и нормы";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ratioChart))->EndInit();
 			this->ResumeLayout(false);
 
@@ -118,7 +118,7 @@ namespace Sketch
 #pragma endregion
 
 		/// <summary>
-		/// ���������� ������� ������������� � �������������� ��������.
+		/// Подсчитать средние систолическое и диастолическое давления.
 		/// </summary>
 		void CalcAveragePressure() 
 		{
@@ -132,7 +132,7 @@ namespace Sketch
 		}
 
 		/// <summary>
-		/// �������� ���������� ����, ����� ���� ���������� (�������� �� 20 % � ����� ���� ��������).
+		/// Получить количество дней, когда была гипертония (значение на 20 % и более выше среднего).
 		/// </summary>
 		int GetHypertensionPressureDayCount() 
 		{
@@ -151,7 +151,7 @@ namespace Sketch
 		}
 
 		/// <summary>
-		/// �������� ���������� ����, ����� ���� ��������� (�������� �� 20 % � ����� ���� ��������).
+		/// Получить количество дней, когда была гипотония (значение на 20 % и более ниже среднего).
 		/// </summary>
 		int GetHypotensionPressureDayCount()
 		{
@@ -170,8 +170,8 @@ namespace Sketch
 		}
 
 		/// <summary>
-		/// �������� ���������� ����, ����� ���� ���������� �������� 
-		/// (� �������� �� 80% �� 120% �� �������� ��������).
+		/// Получить количество дней, когда было нормальное давление
+		/// (в пределах от 80% до 120% от среднего значения).
 		/// </summary>
 		int GetNormalPressureDaysCount() 
 		{
