@@ -58,6 +58,9 @@
     <ClInclude Include="PressurePlotForm.h">
       <Filter>Forms</Filter>
     </ClInclude>
+    <ClInclude Include="PressureRatioForm.h">
+      <Filter>Forms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pressure.cpp">
