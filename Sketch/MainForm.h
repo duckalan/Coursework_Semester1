@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "HealthEntry.h"
 #include "EntryTableUserControl.h"
+#include "FilterFunctions.h"
 
 namespace Sketch {
 
@@ -11,6 +12,7 @@ namespace Sketch {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
+	using namespace System::Linq;
 	using namespace Utility;
 
 	public ref class MainForm : public System::Windows::Forms::Form
@@ -19,7 +21,7 @@ namespace Sketch {
 		/// Счётчик новых вкладок для добавления нумерации в их названия.
 		/// Используется при создании новых файлов как стандартное имя.
 		/// </summary>
-		int newTabPageCounter = 1;
+		int _newTabPageCounter = 1;
 
 	public:
 		MainForm(void)
@@ -38,31 +40,23 @@ namespace Sketch {
 	private: System::Windows::Forms::TabControl^ mainTabControl;
 	private: System::Windows::Forms::TabPage^ initialTabPage;
 	private: System::Windows::Forms::MenuStrip^ mainMenuStrip;
-
 	private: System::Windows::Forms::ToolStripMenuItem^ fileToolStripMenu;
 	private: System::Windows::Forms::ToolStripMenuItem^ newFileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ openFileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ saveFileToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ filtersToolStripMenu;
 	private: System::Windows::Forms::ToolStripMenuItem^ pressureFilterToolStripMenuItem;
-
 	private: System::Windows::Forms::ToolStripMenuItem^ healthStateFilterToolStripMenuItem;
 	private: System::Windows::Forms::ToolStripMenuItem^ pulseFilterToolStripMenuItem;
-
-
-
-
 	private: System::Windows::Forms::ToolStripMenuItem^ additionalToolStripMenu;
-
-
-	private: System::Windows::Forms::ToolStripMenuItem^ утреннееToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ дневноеToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ вечернееToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ удовлетворительноToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ неудовлетворительноToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ выше120ToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ графикДавленияЗаПоследние30ДнейToolStripMenuItem;
-	private: System::Windows::Forms::ToolStripMenuItem^ соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ morningToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ dayToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ eveningToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ goodToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ satisfactoryToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ higher120ToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ oneMonthPressurePlotToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ pressureRatioToolStripMenuItem;
 	private: System::Windows::Forms::Panel^ initialPanel;
 	private: System::Windows::Forms::Button^ createNewFileButton;
 	private: System::Windows::Forms::Button^ openFileButton;
@@ -70,6 +64,8 @@ namespace Sketch {
 	private: System::Windows::Forms::Label^ welcomeLabel;
 	private: System::Windows::Forms::ToolStripMenuItem^ saveAsToolStripMenuItem;
 	private: System::Windows::Forms::SaveFileDialog^ saveFileDialog;
+	private: System::Windows::Forms::ToolStripMenuItem^ nightToolStripMenuItem;
+	private: System::Windows::Forms::ToolStripMenuItem^ unsatisfactoryToolStripMenuItem;
 
 	private:
 		System::ComponentModel::Container ^components;
@@ -95,17 +91,19 @@ namespace Sketch {
 			this->saveAsToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->filtersToolStripMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->pressureFilterToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->утреннееToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->дневноеToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->вечернееToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->morningToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->dayToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->eveningToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->nightToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->healthStateFilterToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->удовлетворительноToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->неудовлетворительноToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->goodToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->satisfactoryToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->unsatisfactoryToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->pulseFilterToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->выше120ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->higher120ToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->additionalToolStripMenu = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->графикДавленияЗаПоследние30ДнейToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
-			this->соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->oneMonthPressurePlotToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
+			this->pressureRatioToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			this->openFileDialog = (gcnew System::Windows::Forms::OpenFileDialog());
 			this->saveFileDialog = (gcnew System::Windows::Forms::SaveFileDialog());
 			this->mainTabControl->SuspendLayout();
@@ -215,14 +213,14 @@ namespace Sketch {
 			// newFileToolStripMenuItem
 			// 
 			this->newFileToolStripMenuItem->Name = L"newFileToolStripMenuItem";
-			this->newFileToolStripMenuItem->Size = System::Drawing::Size(180, 24);
+			this->newFileToolStripMenuItem->Size = System::Drawing::Size(170, 24);
 			this->newFileToolStripMenuItem->Text = L"Создать";
 			this->newFileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::createNewFileButton_Click);
 			// 
 			// openFileToolStripMenuItem
 			// 
 			this->openFileToolStripMenuItem->Name = L"openFileToolStripMenuItem";
-			this->openFileToolStripMenuItem->Size = System::Drawing::Size(180, 24);
+			this->openFileToolStripMenuItem->Size = System::Drawing::Size(170, 24);
 			this->openFileToolStripMenuItem->Text = L"Открыть";
 			this->openFileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::openFileButton_Click);
 			// 
@@ -230,7 +228,7 @@ namespace Sketch {
 			// 
 			this->saveFileToolStripMenuItem->Enabled = false;
 			this->saveFileToolStripMenuItem->Name = L"saveFileToolStripMenuItem";
-			this->saveFileToolStripMenuItem->Size = System::Drawing::Size(180, 24);
+			this->saveFileToolStripMenuItem->Size = System::Drawing::Size(170, 24);
 			this->saveFileToolStripMenuItem->Text = L"Сохранить";
 			this->saveFileToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveFileToolStripMenuItem_Click);
 			// 
@@ -238,7 +236,7 @@ namespace Sketch {
 			// 
 			this->saveAsToolStripMenuItem->Enabled = false;
 			this->saveAsToolStripMenuItem->Name = L"saveAsToolStripMenuItem";
-			this->saveAsToolStripMenuItem->Size = System::Drawing::Size(180, 24);
+			this->saveAsToolStripMenuItem->Size = System::Drawing::Size(170, 24);
 			this->saveAsToolStripMenuItem->Text = L"Сохранить как";
 			this->saveAsToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::saveAsToolStripMenuItem_Click);
 			// 
@@ -255,89 +253,126 @@ namespace Sketch {
 			// 
 			// pressureFilterToolStripMenuItem
 			// 
-			this->pressureFilterToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
-				this->утреннееToolStripMenuItem,
-					this->дневноеToolStripMenuItem, this->вечернееToolStripMenuItem
+			this->pressureFilterToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(4) {
+				this->morningToolStripMenuItem,
+					this->dayToolStripMenuItem, this->eveningToolStripMenuItem, this->nightToolStripMenuItem
 			});
 			this->pressureFilterToolStripMenuItem->Name = L"pressureFilterToolStripMenuItem";
 			this->pressureFilterToolStripMenuItem->Size = System::Drawing::Size(208, 24);
 			this->pressureFilterToolStripMenuItem->Text = L"Давление";
 			// 
-			// утреннееToolStripMenuItem
+			// morningToolStripMenuItem
 			// 
-			this->утреннееToolStripMenuItem->Name = L"утреннееToolStripMenuItem";
-			this->утреннееToolStripMenuItem->Size = System::Drawing::Size(138, 24);
-			this->утреннееToolStripMenuItem->Text = L"Утреннее";
+			this->morningToolStripMenuItem->CheckOnClick = true;
+			this->morningToolStripMenuItem->Name = L"morningToolStripMenuItem";
+			this->morningToolStripMenuItem->Size = System::Drawing::Size(138, 24);
+			this->morningToolStripMenuItem->Text = L"Утреннее";
+			this->morningToolStripMenuItem->ToolTipText = L"Показывать записи только с утренним давлением";
+			this->morningToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::morningToolStripMenuItem_CheckedChanged);
 			// 
-			// дневноеToolStripMenuItem
+			// dayToolStripMenuItem
 			// 
-			this->дневноеToolStripMenuItem->Name = L"дневноеToolStripMenuItem";
-			this->дневноеToolStripMenuItem->Size = System::Drawing::Size(138, 24);
-			this->дневноеToolStripMenuItem->Text = L"Дневное";
+			this->dayToolStripMenuItem->CheckOnClick = true;
+			this->dayToolStripMenuItem->Name = L"dayToolStripMenuItem";
+			this->dayToolStripMenuItem->Size = System::Drawing::Size(138, 24);
+			this->dayToolStripMenuItem->Text = L"Дневное";
+			this->dayToolStripMenuItem->ToolTipText = L"Показывать записи только с дневным давлением";
+			this->dayToolStripMenuItem->CheckStateChanged += gcnew System::EventHandler(this, &MainForm::dayToolStripMenuItem_CheckStateChanged);
 			// 
-			// вечернееToolStripMenuItem
+			// eveningToolStripMenuItem
 			// 
-			this->вечернееToolStripMenuItem->Name = L"вечернееToolStripMenuItem";
-			this->вечернееToolStripMenuItem->Size = System::Drawing::Size(138, 24);
-			this->вечернееToolStripMenuItem->Text = L"Вечернее";
+			this->eveningToolStripMenuItem->CheckOnClick = true;
+			this->eveningToolStripMenuItem->Name = L"eveningToolStripMenuItem";
+			this->eveningToolStripMenuItem->Size = System::Drawing::Size(138, 24);
+			this->eveningToolStripMenuItem->Text = L"Вечернее";
+			this->eveningToolStripMenuItem->ToolTipText = L"Показывать записи только с вечерним давлением";
+			this->eveningToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::eveningToolStripMenuItem_CheckedChanged);
+			// 
+			// nightToolStripMenuItem
+			// 
+			this->nightToolStripMenuItem->CheckOnClick = true;
+			this->nightToolStripMenuItem->Name = L"nightToolStripMenuItem";
+			this->nightToolStripMenuItem->Size = System::Drawing::Size(138, 24);
+			this->nightToolStripMenuItem->Text = L"Ночное";
+			this->nightToolStripMenuItem->ToolTipText = L"Показывать записи только с ночным давлением";
+			this->nightToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::nightToolStripMenuItem_CheckedChanged);
 			// 
 			// healthStateFilterToolStripMenuItem
 			// 
-			this->healthStateFilterToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
-				this->удовлетворительноToolStripMenuItem,
-					this->неудовлетворительноToolStripMenuItem
+			this->healthStateFilterToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
+				this->goodToolStripMenuItem,
+					this->satisfactoryToolStripMenuItem, this->unsatisfactoryToolStripMenuItem
 			});
 			this->healthStateFilterToolStripMenuItem->Name = L"healthStateFilterToolStripMenuItem";
 			this->healthStateFilterToolStripMenuItem->Size = System::Drawing::Size(208, 24);
 			this->healthStateFilterToolStripMenuItem->Text = L"Состояние здоровья";
 			// 
-			// удовлетворительноToolStripMenuItem
+			// goodToolStripMenuItem
 			// 
-			this->удовлетворительноToolStripMenuItem->Name = L"удовлетворительноToolStripMenuItem";
-			this->удовлетворительноToolStripMenuItem->Size = System::Drawing::Size(219, 24);
-			this->удовлетворительноToolStripMenuItem->Text = L"Удовлетворительно";
+			this->goodToolStripMenuItem->CheckOnClick = true;
+			this->goodToolStripMenuItem->Name = L"goodToolStripMenuItem";
+			this->goodToolStripMenuItem->Size = System::Drawing::Size(219, 24);
+			this->goodToolStripMenuItem->Text = L"Хорошо";
+			this->goodToolStripMenuItem->ToolTipText = L"хорошим состоянием здоровья";
+			this->goodToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::goodToolStripMenuItem_CheckedChanged);
 			// 
-			// неудовлетворительноToolStripMenuItem
+			// satisfactoryToolStripMenuItem
 			// 
-			this->неудовлетворительноToolStripMenuItem->Name = L"неудовлетворительноToolStripMenuItem";
-			this->неудовлетворительноToolStripMenuItem->Size = System::Drawing::Size(219, 24);
-			this->неудовлетворительноToolStripMenuItem->Text = L"Неудовлетворительно";
+			this->satisfactoryToolStripMenuItem->CheckOnClick = true;
+			this->satisfactoryToolStripMenuItem->Name = L"satisfactoryToolStripMenuItem";
+			this->satisfactoryToolStripMenuItem->Size = System::Drawing::Size(219, 24);
+			this->satisfactoryToolStripMenuItem->Text = L"Удовлетворительно";
+			this->satisfactoryToolStripMenuItem->ToolTipText = L"Показывать записи только с удовлетворительным состоянием здоровья";
+			this->satisfactoryToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::satisfactoryToolStripMenuItem_CheckedChanged);
+			// 
+			// unsatisfactoryToolStripMenuItem
+			// 
+			this->unsatisfactoryToolStripMenuItem->CheckOnClick = true;
+			this->unsatisfactoryToolStripMenuItem->Name = L"unsatisfactoryToolStripMenuItem";
+			this->unsatisfactoryToolStripMenuItem->Size = System::Drawing::Size(219, 24);
+			this->unsatisfactoryToolStripMenuItem->Text = L"Неудовлетворительно";
+			this->unsatisfactoryToolStripMenuItem->ToolTipText = L"Показывать записи только с неудовлетворительным состоянием здоровья";
+			this->unsatisfactoryToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::unsatisfactoryToolStripMenuItem_CheckedChanged);
 			// 
 			// pulseFilterToolStripMenuItem
 			// 
-			this->pulseFilterToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->выше120ToolStripMenuItem });
+			this->pulseFilterToolStripMenuItem->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->higher120ToolStripMenuItem });
 			this->pulseFilterToolStripMenuItem->Name = L"pulseFilterToolStripMenuItem";
 			this->pulseFilterToolStripMenuItem->Size = System::Drawing::Size(208, 24);
 			this->pulseFilterToolStripMenuItem->Text = L"Пульс";
 			// 
-			// выше120ToolStripMenuItem
+			// higher120ToolStripMenuItem
 			// 
-			this->выше120ToolStripMenuItem->Name = L"выше120ToolStripMenuItem";
-			this->выше120ToolStripMenuItem->Size = System::Drawing::Size(142, 24);
-			this->выше120ToolStripMenuItem->Text = L"Выше 120";
+			this->higher120ToolStripMenuItem->CheckOnClick = true;
+			this->higher120ToolStripMenuItem->Name = L"higher120ToolStripMenuItem";
+			this->higher120ToolStripMenuItem->Size = System::Drawing::Size(142, 24);
+			this->higher120ToolStripMenuItem->Text = L"Выше 120";
+			this->higher120ToolStripMenuItem->ToolTipText = L"Показывать записи только с пульсом выше 120";
+			this->higher120ToolStripMenuItem->CheckedChanged += gcnew System::EventHandler(this, &MainForm::higher120ToolStripMenuItem_CheckedChanged);
 			// 
 			// additionalToolStripMenu
 			// 
 			this->additionalToolStripMenu->DropDownItems->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(2) {
-				this->графикДавленияЗаПоследние30ДнейToolStripMenuItem,
-					this->соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem
+				this->oneMonthPressurePlotToolStripMenuItem,
+					this->pressureRatioToolStripMenuItem
 			});
 			this->additionalToolStripMenu->Enabled = false;
 			this->additionalToolStripMenu->Name = L"additionalToolStripMenu";
 			this->additionalToolStripMenu->Size = System::Drawing::Size(121, 23);
 			this->additionalToolStripMenu->Text = L"Дополнительно";
 			// 
-			// графикДавленияЗаПоследние30ДнейToolStripMenuItem
+			// oneMonthPressurePlotToolStripMenuItem
 			// 
-			this->графикДавленияЗаПоследние30ДнейToolStripMenuItem->Name = L"графикДавленияЗаПоследние30ДнейToolStripMenuItem";
-			this->графикДавленияЗаПоследние30ДнейToolStripMenuItem->Size = System::Drawing::Size(413, 24);
-			this->графикДавленияЗаПоследние30ДнейToolStripMenuItem->Text = L"График давления за последние 30 дней";
+			this->oneMonthPressurePlotToolStripMenuItem->Name = L"oneMonthPressurePlotToolStripMenuItem";
+			this->oneMonthPressurePlotToolStripMenuItem->Size = System::Drawing::Size(413, 24);
+			this->oneMonthPressurePlotToolStripMenuItem->Text = L"График давления за последние 30 дней";
+			this->oneMonthPressurePlotToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::oneMonthPressurePlotToolStripMenuItem_Click);
 			// 
-			// соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem
+			// pressureRatioToolStripMenuItem
 			// 
-			this->соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem->Name = L"соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem";
-			this->соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem->Size = System::Drawing::Size(413, 24);
-			this->соотношениеДнейГипертонииГипотонииИНормыToolStripMenuItem->Text = L"Соотношение дней гипертонии, гипотонии и нормы";
+			this->pressureRatioToolStripMenuItem->Name = L"pressureRatioToolStripMenuItem";
+			this->pressureRatioToolStripMenuItem->Size = System::Drawing::Size(413, 24);
+			this->pressureRatioToolStripMenuItem->Text = L"Соотношение дней гипертонии, гипотонии и нормы";
 			// 
 			// openFileDialog
 			// 
@@ -430,7 +465,7 @@ namespace Sketch {
 			String^ overwritedFileName = GetRelativeFilePath(pathToOverwritedFile);
 			// Проверка на открытую вкладку перезаписываемого файла.
 			// Закрываем её, если она есть.
-			for (size_t i = 0; i < mainTabControl->TabCount; i++)
+			for (int i = 0; i < mainTabControl->TabCount; i++)
 			{
 				if (i != mainTabControl->SelectedIndex &&
 					mainTabControl->TabPages[i]->Text->Equals(overwritedFileName))
@@ -442,14 +477,139 @@ namespace Sketch {
 			mainTabControl->SelectedTab->Text = overwritedFileName;
 		}
 
+		/// <summary>
+		/// Снять флаг со всех предметов во всём меню, кроме <paramref name="untouchable"/>
+		/// и его владельца.
+		/// </summary>
+		/// <param name="untouchable">Предмет, с которого не будет сниматься флаг.</param>
+		void UncheckOtherFilterToolStripMenuItems(ToolStripMenuItem^ untouchable) 
+		{
+			auto currentOwner = (ToolStripMenuItem^)untouchable->OwnerItem;
+			for each (ToolStripMenuItem^ parentMenuItem in filtersToolStripMenu->DropDownItems)
+			{
+				if (!parentMenuItem->Equals(currentOwner) && parentMenuItem->Checked)
+				{
+					parentMenuItem->Checked = false;
+				}
+
+				for each (ToolStripMenuItem^ childMenuItem in parentMenuItem->DropDownItems)
+				{
+					if (!childMenuItem->Equals(untouchable) && childMenuItem->Checked)
+					{
+						childMenuItem->Checked = false;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Находится ли во всём меню фильтров хотя бы ещё один помеченный элемент,
+		/// кроме <paramref name="untouchable"/>.
+		/// </summary>
+		bool IsOtherFilterToolStripMenuItemsChecked(ToolStripMenuItem^ untouchable) 
+		{
+			auto currentOwner = (ToolStripMenuItem^)untouchable->OwnerItem;
+			for each (ToolStripMenuItem^ parentMenuItem in filtersToolStripMenu->DropDownItems)
+			{
+				if (!parentMenuItem->Equals(currentOwner) && parentMenuItem->Checked)
+				{
+					return true;
+				}
+
+				for each (ToolStripMenuItem^ childMenuItem in parentMenuItem->DropDownItems)
+				{
+					if (!childMenuItem->Equals(untouchable) && childMenuItem->Checked)
+					{
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Получить объект DataGridView из текущей выбранной вкладки
+		/// </summary>
+		DataGridView^ GetDataGridViewFromSelectedTab() 
+		{
+			// Индекс DataGridView в TableLayoutPanel, которая находится в EntryTableUserControl
+			const int dataGridViewIndex = 2;
+
+			// Получаем EntryTableUserControl в выбранной вкладке
+			auto currentEntryTableUserControl = (EntryTableUserControl^)mainTabControl->SelectedTab->Controls["EntryTableUserControl"];
+
+			// Получаем DataGrid из TableLayoutPanel в EntryTable по индексу
+			return (DataGridView^)currentEntryTableUserControl->Controls["TableLayoutPanel"]->Controls[dataGridViewIndex];
+		}
+
+		/// <summary>
+		/// Скрываем все строки <paramref name="dataGridView"/>, для которых выполняется
+		/// условие <paramref name="predicate"/>.
+		/// </summary>
+		void HideAllFilteredEntries(DataGridView^ dataGridView, Predicate<DataGridViewCellCollection^>^ predicate)
+		{
+			// Без этого при скрытии 0 строки вылетит странная ошибка
+			dataGridView->CurrentCell = nullptr;
+			for each (DataGridViewRow^ row in dataGridView->Rows)
+			{
+				if (predicate(row->Cells))
+				{
+					row->Visible = false;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Если <paramref name="filterMenuSubSubItem"/> помечен, офильтровываем все строки 
+		/// DataGridView текущей вкладки, для которых выполняется
+		/// условие <paramref name="predicate"/>, и помечаем его родительский
+		/// элемент. Иначе делаем все строки видимыми и снимаем флаг с родительского,
+		/// если ни один его элемент не помечен.
+		/// </summary>
+		void FilterByToolStripMenuItem(ToolStripMenuItem^ filterMenuSubSubItem,
+			Predicate<DataGridViewCellCollection^>^ predicate) 
+		{
+			auto dataGridView = GetDataGridViewFromSelectedTab();
+			auto parentMenuItem = (ToolStripMenuItem^)filterMenuSubSubItem->OwnerItem;
+
+			if (filterMenuSubSubItem->Checked)
+			{
+				parentMenuItem->Checked = true;
+
+				// Если предмет помечается, когда уже есть помеченный, необходимо сделать 
+				// и только потом снять флаг с уже помеченного
+				if (IsOtherFilterToolStripMenuItemsChecked(filterMenuSubSubItem))
+				{
+					for each (DataGridViewRow ^ row in dataGridView->Rows)
+					{
+						row->Visible = true;
+					}
+				}
+				UncheckOtherFilterToolStripMenuItems(filterMenuSubSubItem);
+				HideAllFilteredEntries(dataGridView, predicate);
+			}
+			// Если с предмета сняли флаг и больше ни одного предмета в меню не было
+			// помечено, открываем все строки и снимаем флаг с родителя
+			else if (!filterMenuSubSubItem->Checked && !IsOtherFilterToolStripMenuItemsChecked(filterMenuSubSubItem))
+			{
+				for each (DataGridViewRow ^ row in dataGridView->Rows)
+				{
+					row->Visible = true;
+				}
+
+				parentMenuItem->Checked = false;
+			}
+		}
+
+
 /// <summary>
 ///  Создание новой вкладки для нового файла
 /// </summary>
 private: System::Void createNewFileButton_Click(System::Object^ sender, System::EventArgs^ e) 
 	{
 		// Создаём название и текст вкладки с нумерацией
-		String^ newTabPageText = String::Format("Без названия{0}", newTabPageCounter);
-		String^ newTabPageName = String::Format("newTabPage{0}", newTabPageCounter);
+		String^ newTabPageText = String::Format("Без названия{0}", _newTabPageCounter);
+		String^ newTabPageName = String::Format("newTabPage{0}", _newTabPageCounter);
 
 		// Создаём вкладку
 		TabPage^ newTabPage = gcnew TabPage(newTabPageText);
@@ -463,13 +623,10 @@ private: System::Void createNewFileButton_Click(System::Object^ sender, System::
 		mainTabControl->TabPages->Add(newTabPage);
 		mainTabControl->SelectTab(newTabPageName);
 
-		newTabPageCounter++;
+		_newTabPageCounter++;
 	}
 
-// TODO: СОБЫТИЕ - НАЖАТИЕ ПКМ НА TABPAGE 
-// С ВЫВОДОМ СПИСКА: УДАЛИТЬ, ПЕРЕИМЕНОВАТЬ
-
-
+#pragma region События с mainTabControl
 /// <summary>
 /// Делаем активными/неактивными опции меню, которые нужны только для открытого файла
 /// </summary>
@@ -492,6 +649,12 @@ private: System::Void mainTabControl_Selected(System::Object^ sender, System::Wi
 	}
 }
 
+// TODO: СОБЫТИЕ - НАЖАТИЕ ПКМ НА TABPAGE 
+// С ВЫВОДОМ СПИСКА: УДАЛИТЬ, ПЕРЕИМЕНОВАТЬ
+
+#pragma endregion
+
+#pragma region События с меню "Файл"
 /// <summary>
 /// Открытие существующего файла.
 /// </summary>
@@ -590,7 +753,7 @@ private: System::Void saveFileToolStripMenuItem_Click(System::Object^ sender, Sy
 }
 
 /// <summary>
-/// Сохранение файла с другими параметрами (другой путь, имя).
+/// "Сохранить как". Сохранение файла с другими параметрами (другой путь, имя).
 /// </summary>
 private: System::Void saveAsToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e)
 {
@@ -631,5 +794,92 @@ private: System::Void saveAsToolStripMenuItem_Click(System::Object^ sender, Syst
 		ShowFileSaveErrorMessage();
 	}
 }
+
+#pragma endregion
+		
+#pragma region События с меню "Фильтры"
+/// <summary>
+/// При пометке флага "Утреннее" фильтруем по нему.
+/// </summary>
+private: System::Void morningToolStripMenuItem_CheckedChanged(System::Object^ sender, System::EventArgs^ e) 
+{
+	FilterByToolStripMenuItem(morningToolStripMenuItem,
+		gcnew Predicate<DataGridViewCellCollection^>(&FilterFunctions::FilterByMorningPressure));
+}
+
+/// <summary>
+/// При пометке флага "Дневное" фильтруем по нему.
+/// </summary>
+private: System::Void dayToolStripMenuItem_CheckStateChanged(System::Object^ sender, System::EventArgs^ e) 
+{
+	FilterByToolStripMenuItem(dayToolStripMenuItem,
+		gcnew Predicate<DataGridViewCellCollection^>(&FilterFunctions::FilterByDayPressure));
+}
+
+/// <summary>
+/// При пометке флага "Вечернее" фильтруем по нему.
+/// </summary>
+private: System::Void eveningToolStripMenuItem_CheckedChanged(System::Object^ sender, System::EventArgs^ e) 
+{
+	FilterByToolStripMenuItem(eveningToolStripMenuItem,
+		gcnew Predicate<DataGridViewCellCollection^>(&FilterFunctions::FilterByEveningPressure));
+}
+	   
+/// <summary>
+/// При пометке флага "Ночное" фильтруем по нему.
+/// </summary>
+private: System::Void nightToolStripMenuItem_CheckedChanged(System::Object^ sender, System::EventArgs^ e) 
+{
+	FilterByToolStripMenuItem(nightToolStripMenuItem,
+		gcnew Predicate<DataGridViewCellCollection^>(&FilterFunctions::FilterByNightPressure));
+}
+
+/// <summary>
+/// При пометке флага "Хорошее" фильтруем по нему.
+/// </summary>
+private: System::Void goodToolStripMenuItem_CheckedChanged(System::Object^ sender, System::EventArgs^ e) 
+{
+	FilterByToolStripMenuItem(goodToolStripMenuItem,
+		gcnew Predicate<DataGridViewCellCollection^>(&FilterFunctions::FilterByGoodHealthState));
+}
+
+/// <summary>
+/// При пометке флага "Удовлетворительное" фильтруем по нему.
+/// </summary>
+private: System::Void satisfactoryToolStripMenuItem_CheckedChanged(System::Object^ sender, System::EventArgs^ e) 
+{
+	FilterByToolStripMenuItem(satisfactoryToolStripMenuItem,
+		gcnew Predicate<DataGridViewCellCollection^>(&FilterFunctions::FilterBySatisfactoryHealthState));
+}
+
+/// <summary>
+/// При пометке флага "Неудовлетворительное" фильтруем по нему.
+/// </summary>
+private: System::Void unsatisfactoryToolStripMenuItem_CheckedChanged(System::Object^ sender, System::EventArgs^ e) 
+{
+	FilterByToolStripMenuItem(unsatisfactoryToolStripMenuItem,
+		gcnew Predicate<DataGridViewCellCollection^>(&FilterFunctions::FilterByUnsatisfactoryHealthState));
+}
+
+/// <summary>
+/// При пометке флага "Пульс выше 120" фильтруем по нему.
+/// </summary>
+private: System::Void higher120ToolStripMenuItem_CheckedChanged(System::Object^ sender, System::EventArgs^ e) 
+{
+	FilterByToolStripMenuItem(higher120ToolStripMenuItem,
+		gcnew Predicate<DataGridViewCellCollection^>(&FilterFunctions::FilterByPulseHigher120));
+}
+
+#pragma endregion
+
+#pragma region События с меню "Дополнительное"
+/// <summary>
+/// Вывод графика давления за последние 30 дней отдельной формой.
+/// </summary>
+private: System::Void oneMonthPressurePlotToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) 
+{
+}
+
+#pragma endregion
 };
 }

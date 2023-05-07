@@ -52,6 +52,12 @@
     <ClInclude Include="EntryEditorForm.h">
       <Filter>Forms</Filter>
     </ClInclude>
+    <ClInclude Include="FilterFunctions.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PressurePlotForm.h">
+      <Filter>Forms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pressure.cpp">
@@ -67,6 +73,9 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="FilterFunctions.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
