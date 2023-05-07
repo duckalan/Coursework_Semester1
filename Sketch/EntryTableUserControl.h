@@ -1,19 +1,19 @@
 ﻿#pragma once
+
 #include "HealthEntry.h"
 #include "EntryEditorForm.h"
+#include "MainForm.h"
 
-using namespace System;
-using namespace System::ComponentModel;
-using namespace System::Collections::Generic;
-using namespace System::Windows::Forms;
-using namespace System::Data;
-using namespace System::Drawing;
-using namespace Utility;
+namespace Sketch 
+{
+	using namespace System;
+	using namespace System::ComponentModel;
+	using namespace System::Collections::Generic;
+	using namespace System::Windows::Forms;
+	using namespace System::Data;
+	using namespace System::Drawing;
+	using namespace Utility;
 
-
-namespace Sketch {
-
-	
 	/// <summary>
 	/// Контрол для таблицы с записями и возможностями для их редактирования.
 	/// </summary>
@@ -90,6 +90,13 @@ namespace Sketch {
 		{
 			bool get() { return _isFilled; }
 		}
+
+		/// <summary>
+		/// Влючён ли в данным момент какой-либо фильтр. Так как достать свойство
+		/// из родительской MainForm не получается, приходится в самом MainForm
+		/// при изменениях фильтров использовать это свойство.
+		/// </summary>
+		property bool IsFilterActive;
 
 		/// <summary>
 		/// Создание файла по пути <paramref name="filePath"/> с текущей таблицей. При этом сохраняется путь этого файла.
@@ -323,6 +330,15 @@ private:
 		/// </summary>
 		private: System::Void addEntryButton_Click(System::Object^ sender, System::EventArgs^ e) 
 		{
+			if (IsFilterActive)
+			{
+				MessageBox::Show(this, 
+					"Для добавления записи в главном окне снимите флаг с текущего фильтра.",
+					"Ошибка добавления записи",
+					MessageBoxButtons::OK, MessageBoxIcon::Error);
+				return;
+			}
+
 			auto addForm = gcnew EntryEditorForm(EntryList);
 
 			addForm->ShowDialog();

@@ -2,8 +2,11 @@
 #include "HealthEntry.h"
 #include "EntryTableUserControl.h"
 #include "FilterFunctions.h"
+#include "PressurePlotForm.h"
+#include "PressureRatioForm.h"
 
-namespace Sketch {
+namespace Sketch 
+{
 
 	using namespace System;
 	using namespace System::IO;
@@ -373,6 +376,7 @@ namespace Sketch {
 			this->pressureRatioToolStripMenuItem->Name = L"pressureRatioToolStripMenuItem";
 			this->pressureRatioToolStripMenuItem->Size = System::Drawing::Size(413, 24);
 			this->pressureRatioToolStripMenuItem->Text = L"Соотношение дней гипертонии, гипотонии и нормы";
+			this->pressureRatioToolStripMenuItem->Click += gcnew System::EventHandler(this, &MainForm::pressureRatioToolStripMenuItem_Click);
 			// 
 			// openFileDialog
 			// 
@@ -414,7 +418,7 @@ namespace Sketch {
 		/// <summary>
 		/// Вывод MessageBox с ошибкой сохранения пустого файла.
 		/// </summary>
-		void ShowFileSaveErrorMessage() {
+		void ShowEmptyFileSaveErrorMessage() {
 			MessageBox::Show(this, "Чтобы сохранить файл, в нём должна находится хотя бы одна запись.", "Не удалось сохранить файл",
 				MessageBoxButtons::OK,
 				MessageBoxIcon::Stop);
@@ -569,13 +573,14 @@ namespace Sketch {
 		void FilterByToolStripMenuItem(ToolStripMenuItem^ filterMenuSubSubItem,
 			Predicate<DataGridViewCellCollection^>^ predicate) 
 		{
+			auto currentTable = (EntryTableUserControl^)mainTabControl->SelectedTab->Controls["EntryTableUserControl"];
 			auto dataGridView = GetDataGridViewFromSelectedTab();
 			auto parentMenuItem = (ToolStripMenuItem^)filterMenuSubSubItem->OwnerItem;
 
 			if (filterMenuSubSubItem->Checked)
 			{
 				parentMenuItem->Checked = true;
-
+				currentTable->IsFilterActive = true;
 				// Если предмет помечается, когда уже есть помеченный, необходимо сделать 
 				// и только потом снять флаг с уже помеченного
 				if (IsOtherFilterToolStripMenuItemsChecked(filterMenuSubSubItem))
@@ -598,6 +603,7 @@ namespace Sketch {
 				}
 
 				parentMenuItem->Checked = false;
+				currentTable->IsFilterActive = false;
 			}
 		}
 
@@ -734,7 +740,7 @@ private: System::Void saveFileToolStripMenuItem_Click(System::Object^ sender, Sy
 		// Если не заполнена, выбрасываем сообщение
 		else
 		{
-			ShowFileSaveErrorMessage();
+			ShowEmptyFileSaveErrorMessage();
 		}
 	}
 	// Иначе сохраняем изменённую таблицу в тот же файл
@@ -747,7 +753,7 @@ private: System::Void saveFileToolStripMenuItem_Click(System::Object^ sender, Sy
 		}
 		else
 		{
-			ShowFileSaveErrorMessage();
+			ShowEmptyFileSaveErrorMessage();
 		}
 	}
 }
@@ -791,7 +797,7 @@ private: System::Void saveAsToolStripMenuItem_Click(System::Object^ sender, Syst
 	}
 	else
 	{
-		ShowFileSaveErrorMessage();
+		ShowEmptyFileSaveErrorMessage();
 	}
 }
 
@@ -878,6 +884,41 @@ private: System::Void higher120ToolStripMenuItem_CheckedChanged(System::Object^ 
 /// </summary>
 private: System::Void oneMonthPressurePlotToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) 
 {
+	auto currentTable = (EntryTableUserControl^)mainTabControl->SelectedTab->Controls["EntryTableUserControl"];
+	if (currentTable->IsFilled)
+	{
+		auto pressurePlotForm = gcnew PressurePlotForm(currentTable->EntryList);
+		pressurePlotForm->Show();
+	}
+	else
+	{
+		MessageBox::Show(this, "Для открытия графика в таблице должна содержаться хотя бы одна запись.",
+			"Ошибка открытия графика давления за последние 30 дней",
+			MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
+	}
+}
+
+/// <summary>
+/// Вывод графика соотношения гипертонии, гипотонии и нормы.
+/// </summary>
+/// <param name="sender"></param>
+/// <param name="e"></param>
+/// <returns></returns>
+private: System::Void pressureRatioToolStripMenuItem_Click(System::Object^ sender, System::EventArgs^ e) 
+{
+	
+	auto currentTable = (EntryTableUserControl^)mainTabControl->SelectedTab->Controls["EntryTableUserControl"];
+	if (currentTable->IsFilled)
+	{
+		auto ratioForm = gcnew PressureRatioForm(currentTable->EntryList);
+		ratioForm->Show();
+	}
+	else
+	{
+		MessageBox::Show(this, "Для открытия графика в таблице должна содержаться хотя бы одна запись.",
+			"Ошибка открытия графика соотношения давлений",
+			MessageBoxButtons::OK, MessageBoxIcon::Exclamation);
+	}
 }
 
 #pragma endregion
