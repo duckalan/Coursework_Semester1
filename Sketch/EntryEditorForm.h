@@ -52,6 +52,8 @@ namespace Sketch {
 			recordTimePeriodComboBox->DataSource = Enum::GetValues(TimePeriod::typeid);
 
 			healthStateComboBox->DataSource = Enum::GetValues(HealthState::typeid);
+
+			pressureMaskedTextBox->Select();
 		}
 
 		/// <summary>
@@ -124,9 +126,7 @@ namespace Sketch {
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::Button^ addAndExitButton;
 	private: System::Windows::Forms::Panel^ insertIndexPanel;
-
 	private: System::Windows::Forms::Label^ insertIndexLabel;
-
 	private: System::Windows::Forms::Button^ cancelButton;
 	private:
 		System::ComponentModel::Container ^components;
@@ -330,6 +330,7 @@ namespace Sketch {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->recordDateTimePicker->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.25F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			this->recordDateTimePicker->Format = System::Windows::Forms::DateTimePickerFormat::Short;
 			this->recordDateTimePicker->Location = System::Drawing::Point(10, 78);
 			this->recordDateTimePicker->Margin = System::Windows::Forms::Padding(10, 3, 10, 3);
 			this->recordDateTimePicker->Name = L"recordDateTimePicker";
@@ -473,28 +474,37 @@ namespace Sketch {
 			bool isInputValide = true;
 			UInt16 systolic;
 			UInt16 diastolic;
-			UInt16 pulse;
+			Byte pulse;
 
 			auto pressureStrings = pressureMaskedTextBox->Text->Split('/');
 			auto isSystolicParsed = UInt16::TryParse(pressureStrings[0], systolic);
 			auto isDiastolicParsed = UInt16::TryParse(pressureStrings[1], diastolic);
-			auto isPulseParsed = UInt16::TryParse(pulseMaskedTextBox->Text, pulse);
+			auto isPulseParsed = Byte::TryParse(pulseMaskedTextBox->Text, pulse);
 
 			// Если не распарсено, значит поле пустое
-			if (!isSystolicParsed || !isDiastolicParsed)
+			if (!isSystolicParsed || !isDiastolicParsed ||
+				systolic > 300 || diastolic > 300)
 			{
 				pressureToolTip->Show("Введите корректное \nзначение", pressureMaskedTextBox, 0, 20, 5000);
 				isInputValide = false;
 			}
 			if (!isPulseParsed)
 			{
-				pulseToolTip->Show("Введите значение", pulseMaskedTextBox, 25, 20, 5000);
+				pulseToolTip->Show("Введите значение от 0 до 255", pulseMaskedTextBox, 0, -20, 5000);
+				
+				isInputValide = false;
+			}
+
+			// Систолическое давление всегда должно быть меньше диастолического
+			if (systolic < diastolic)
+			{
+				pressureToolTip->Show("Систолическое давление не может\nбыть меньше диастолического", pressureMaskedTextBox, 0, 20, 5000);
 				isInputValide = false;
 			}
 
 			// Проверка индекса вставки
 			int insertIndex;
-			auto isInsertIndexNumber = int::TryParse(insertIndexComboBox->Text, insertIndex);
+			bool isInsertIndexNumber = int::TryParse(insertIndexComboBox->Text, insertIndex);
 
 			if (!isInsertIndexNumber)
 			{
@@ -539,13 +549,8 @@ namespace Sketch {
 
 				outputInsertIndex = insertIndex;
 				output = gcnew HealthEntry(recordDate, recordTimePeriod, pressure, pulse, healthState, remark);
-
-				return true;
 			}
-			else
-			{
-				return false;
-			}
+			return isInputValide;
 		}
 
 	/// <summary>
@@ -574,6 +579,5 @@ namespace Sketch {
 	{
 		this->Close();
 	}
-
-	};
+};
 }

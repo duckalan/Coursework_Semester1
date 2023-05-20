@@ -44,6 +44,14 @@ namespace Sketch
 			// В легенде отображать значения по X
 			ratioChart->Series[0]->LegendText = "#VALX"; 
 
+			// Не показывать пустые точки
+			for each (auto var in ratioChart->Series[0]->Points)
+			{
+				if (var->YValues[0] == 0)
+				{
+					var->IsEmpty = true;
+				}
+			}
 		}
 
 	protected:

@@ -119,6 +119,8 @@ namespace Sketch
 			// 
 			this->mainTabControl->Controls->Add(this->initialTabPage);
 			this->mainTabControl->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->mainTabControl->HotTrack = true;
+			this->mainTabControl->ImeMode = System::Windows::Forms::ImeMode::NoControl;
 			this->mainTabControl->Location = System::Drawing::Point(0, 27);
 			this->mainTabControl->Name = L"mainTabControl";
 			this->mainTabControl->SelectedIndex = 0;
@@ -402,7 +404,7 @@ namespace Sketch
 			this->MinimumSize = System::Drawing::Size(900, 400);
 			this->Name = L"MainForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
-			this->Text = L"MainForm";
+			this->Text = L"Контроль давления пациента";
 			this->mainTabControl->ResumeLayout(false);
 			this->initialTabPage->ResumeLayout(false);
 			this->initialPanel->ResumeLayout(false);
@@ -422,21 +424,6 @@ namespace Sketch
 			MessageBox::Show(this, "Чтобы сохранить файл, в нём должна находится хотя бы одна запись.", "Не удалось сохранить файл",
 				MessageBoxButtons::OK,
 				MessageBoxIcon::Stop);
-		}
-
-		/// <summary>
-		/// Получить относительный путь файла из полного пути <paramref name="fullFilePath"/>.
-		/// </summary>
-		String^ GetRelativeFilePath(String^ fullFilePath) 
-		{
-			// Высчитываем необходимые значения для получения
-			// относительного имени файла
-			int fileNameBeginningIndex = fullFilePath->LastIndexOf("\\") + 1;
-			int extensionIndex = fullFilePath->LastIndexOf(".");
-			int fileNameLength = extensionIndex - fileNameBeginningIndex;
-
-			// Получаем относительное имя файла
-			return fullFilePath->Substring(fileNameBeginningIndex, fileNameLength);
 		}
 
 		/// <summary>
@@ -466,7 +453,7 @@ namespace Sketch
 		/// </summary>
 		void RemoveOverwritedFileTab(String^ pathToOverwritedFile) 
 		{
-			String^ overwritedFileName = GetRelativeFilePath(pathToOverwritedFile);
+			String^ overwritedFileName = Path::GetFileNameWithoutExtension(pathToOverwritedFile);
 			// Проверка на открытую вкладку перезаписываемого файла.
 			// Закрываем её, если она есть.
 			for (int i = 0; i < mainTabControl->TabCount; i++)
@@ -620,10 +607,10 @@ private: System::Void createNewFileButton_Click(System::Object^ sender, System::
 		// Создаём вкладку
 		TabPage^ newTabPage = gcnew TabPage(newTabPageText);
 		newTabPage->Name = newTabPageName;
-
 		// Создаём в ней пустую таблицу, добавляем вкладку 
 		// в mainTabControl и открываем
 		EntryTableUserControl^ entryTable = gcnew EntryTableUserControl();
+		entryTable->Dock = DockStyle::Fill;
 		newTabPage->Controls->Add(entryTable);
 
 		mainTabControl->TabPages->Add(newTabPage);
@@ -672,7 +659,7 @@ private: System::Void openFileButton_Click(System::Object^ sender, System::Event
 	}
 
 	// Получаем относительное имя файла
-	String^ fileName = GetRelativeFilePath(openFileDialog->FileName);
+	String^ fileName = Path::GetFileNameWithoutExtension(openFileDialog->FileName);
 
 	// Проверка на наличие уже открытого этого же файла
 	for (size_t i = 0; i < mainTabControl->TabCount; i++)
@@ -734,7 +721,7 @@ private: System::Void saveFileToolStripMenuItem_Click(System::Object^ sender, Sy
 			
 			// Меняем название вкладки на название сохранённого файла
 			mainTabControl->SelectedTab->ResetText();
-			mainTabControl->SelectedTab->Text = GetRelativeFilePath(filePath);
+			mainTabControl->SelectedTab->Text = Path::GetFileNameWithoutExtension(filePath);
 			currentTable->CreateFileWithTable(filePath);
 		}
 		// Если не заполнена, выбрасываем сообщение
@@ -776,7 +763,7 @@ private: System::Void saveAsToolStripMenuItem_Click(System::Object^ sender, Syst
 		}
 
 		String^ filePath = saveFileDialog->FileName;
-		String^ fileName = GetRelativeFilePath(filePath);
+		String^ fileName = Path::GetFileNameWithoutExtension(filePath);
 
 		// Если выбрана перезапись файла, то новую вкладку не надо создавать
 		if (File::Exists(filePath))

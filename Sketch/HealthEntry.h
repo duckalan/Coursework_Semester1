@@ -18,7 +18,7 @@ namespace Sketch
 		HealthEntry(DateTime recordDate,
 					Sketch::TimePeriod recordTimePeriod,
 					Sketch::Pressure pressure,
-					UInt16 pulse,
+					Byte pulse,
 					Sketch::HealthState healthState,
 					String^ remark);
 
@@ -32,7 +32,7 @@ namespace Sketch
 		/// Пульс пациента.
 		/// </summary>
 		[DisplayName("Пульс")]
-		property UInt16 Pulse;
+		property Byte Pulse;
 
 		/// <summary>
 		/// Давление пациента.

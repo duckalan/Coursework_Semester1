@@ -5,7 +5,7 @@ using namespace Sketch;
 HealthEntry::HealthEntry(DateTime recordDate,
                          Sketch::TimePeriod recordTimePeriod, 
                          Sketch::Pressure pressure,
-                         UInt16 pulse,
+                         Byte pulse,
                          Sketch::HealthState healthState,
                          String^ remark)
 {

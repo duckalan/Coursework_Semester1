@@ -30,9 +30,9 @@ namespace Sketch {
 			for (int i = 0; i < _filteredList->Count; i++)
 			{
 				auto entry = _filteredList[i];
-				pressureChart->Series[0]->Points->AddXY(entry->RecordDate.Date, inputList[i]->Pressure.Systolic);
+				pressureChart->Series[0]->Points->AddXY(entry->RecordDate.Date, _filteredList[i]->Pressure.Systolic);
 
-				pressureChart->Series[1]->Points->AddXY(entry->RecordDate.Date, inputList[i]->Pressure.Diastolic);
+				pressureChart->Series[1]->Points->AddXY(entry->RecordDate.Date, _filteredList[i]->Pressure.Diastolic);
 			}
 		}
 
@@ -51,50 +51,53 @@ namespace Sketch {
 #pragma region Windows Form Designer generated code
 		void InitializeComponent(void)
 		{
-			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea2 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
-			System::Windows::Forms::DataVisualization::Charting::Legend^ legend2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series3 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
-			System::Windows::Forms::DataVisualization::Charting::Series^ series4 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::ChartArea^ chartArea1 = (gcnew System::Windows::Forms::DataVisualization::Charting::ChartArea());
+			System::Windows::Forms::DataVisualization::Charting::Legend^ legend1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Legend());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series1 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
+			System::Windows::Forms::DataVisualization::Charting::Series^ series2 = (gcnew System::Windows::Forms::DataVisualization::Charting::Series());
 			this->pressureChart = (gcnew System::Windows::Forms::DataVisualization::Charting::Chart());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pressureChart))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// pressureChart
 			// 
-			chartArea2->Name = L"ChartArea1";
-			this->pressureChart->ChartAreas->Add(chartArea2);
+			chartArea1->AxisY->Title = L"мм рт. ст.";
+			chartArea1->AxisY->TitleFont = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			chartArea1->Name = L"ChartArea1";
+			this->pressureChart->ChartAreas->Add(chartArea1);
 			this->pressureChart->Dock = System::Windows::Forms::DockStyle::Fill;
-			legend2->Alignment = System::Drawing::StringAlignment::Far;
-			legend2->DockedToChartArea = L"ChartArea1";
-			legend2->Docking = System::Windows::Forms::DataVisualization::Charting::Docking::Left;
-			legend2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			legend1->Alignment = System::Drawing::StringAlignment::Far;
+			legend1->DockedToChartArea = L"ChartArea1";
+			legend1->Docking = System::Windows::Forms::DataVisualization::Charting::Docking::Left;
+			legend1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			legend2->IsTextAutoFit = false;
-			legend2->ItemColumnSpacing = 40;
-			legend2->MaximumAutoSize = 30;
-			legend2->Name = L"Legend1";
-			legend2->TitleFont = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			legend1->IsTextAutoFit = false;
+			legend1->ItemColumnSpacing = 40;
+			legend1->MaximumAutoSize = 30;
+			legend1->Name = L"Legend1";
+			legend1->TitleFont = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->pressureChart->Legends->Add(legend2);
+			this->pressureChart->Legends->Add(legend1);
 			this->pressureChart->Location = System::Drawing::Point(0, 0);
 			this->pressureChart->Name = L"pressureChart";
-			series3->BorderWidth = 3;
-			series3->ChartArea = L"ChartArea1";
-			series3->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
-			series3->Legend = L"Legend1";
-			series3->LegendText = L"Систолическое давление";
-			series3->Name = L"systolicSeries";
-			series3->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
-			series4->BorderWidth = 3;
-			series4->ChartArea = L"ChartArea1";
-			series4->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
-			series4->Color = System::Drawing::Color::Red;
-			series4->Legend = L"Legend1";
-			series4->LegendText = L"Даистолическое давление";
-			series4->Name = L"diastolicSeries";
-			series4->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
-			this->pressureChart->Series->Add(series3);
-			this->pressureChart->Series->Add(series4);
+			series1->BorderWidth = 3;
+			series1->ChartArea = L"ChartArea1";
+			series1->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
+			series1->Legend = L"Legend1";
+			series1->LegendText = L"Систолическое давление";
+			series1->Name = L"systolicSeries";
+			series1->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
+			series2->BorderWidth = 3;
+			series2->ChartArea = L"ChartArea1";
+			series2->ChartType = System::Windows::Forms::DataVisualization::Charting::SeriesChartType::Line;
+			series2->Color = System::Drawing::Color::Red;
+			series2->Legend = L"Legend1";
+			series2->LegendText = L"Диастолическое давление";
+			series2->Name = L"diastolicSeries";
+			series2->XValueType = System::Windows::Forms::DataVisualization::Charting::ChartValueType::Date;
+			this->pressureChart->Series->Add(series1);
+			this->pressureChart->Series->Add(series2);
 			this->pressureChart->Size = System::Drawing::Size(784, 561);
 			this->pressureChart->TabIndex = 0;
 			this->pressureChart->Text = L"chart1";
@@ -123,7 +126,7 @@ namespace Sketch {
 		/// </summary>
 		void FilterEntriesFromInputList(BindingList<HealthEntry^>^ inputList) 
 		{
-			auto to = DateTime::Now;
+			auto to = DateTime::Now.Date;
 			// 30 дней назад
 			auto from = to.AddDays(-30);
 

@@ -39,5 +39,5 @@ bool Sketch::FilterFunctions::FilterByUnsatisfactoryHealthState(DataGridViewCell
 
 bool Sketch::FilterFunctions::FilterByPulseHigher120(DataGridViewCellCollection^ cells)
 {
-	return (UInt16)cells[pulseCellIndex]->Value < 120;
+	return (Byte)cells[pulseCellIndex]->Value < 120;
 }

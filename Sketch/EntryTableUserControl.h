@@ -7,6 +7,7 @@
 namespace Sketch 
 {
 	using namespace System;
+	using namespace System::Globalization;
 	using namespace System::ComponentModel;
 	using namespace System::Collections::Generic;
 	using namespace System::Windows::Forms;
@@ -45,6 +46,8 @@ namespace Sketch
 			InitializeComponent();
 			EntryList = gcnew BindingList<HealthEntry^>();
 			mainDataGridView->DataSource = EntryList;
+			mainDataGridView->Columns[0]->DefaultCellStyle->Format = CultureInfo::CurrentCulture->DateTimeFormat->ShortDatePattern;
+			EntryList->ListChanged += gcnew System::ComponentModel::ListChangedEventHandler(this, &EntryTableUserControl::OnListChanged);
 
 			AdjustBindedColumns();
 		}
@@ -59,6 +62,8 @@ namespace Sketch
 
 			EntryList = Utility::BinaryFileManager::Load<BindingList<HealthEntry^>^>(filePath);
 			mainDataGridView->DataSource = EntryList;
+			mainDataGridView->Columns[0]->DefaultCellStyle->Format = CultureInfo::CurrentCulture->DateTimeFormat->ShortDatePattern;
+			EntryList->ListChanged += gcnew System::ComponentModel::ListChangedEventHandler(this, &EntryTableUserControl::OnListChanged);
 			_isFilled = true;
 			_isSavedOnce = true;
 			_createdFilePath = filePath;
@@ -143,6 +148,7 @@ namespace Sketch
 		void InitializeComponent(void)
 		{
 			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle1 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
+			System::Windows::Forms::DataGridViewCellStyle^ dataGridViewCellStyle2 = (gcnew System::Windows::Forms::DataGridViewCellStyle());
 			this->tableLayoutPanel = (gcnew System::Windows::Forms::TableLayoutPanel());
 			this->deleteEntryButton = (gcnew System::Windows::Forms::Button());
 			this->editEntryButton = (gcnew System::Windows::Forms::Button());
@@ -172,7 +178,7 @@ namespace Sketch
 			this->tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 33.33333F)));
 			this->tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 33.33333F)));
 			this->tableLayoutPanel->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 33.33333F)));
-			this->tableLayoutPanel->Size = System::Drawing::Size(870, 299);
+			this->tableLayoutPanel->Size = System::Drawing::Size(900, 300);
 			this->tableLayoutPanel->TabIndex = 0;
 			// 
 			// deleteEntryButton
@@ -181,7 +187,7 @@ namespace Sketch
 			this->deleteEntryButton->Location = System::Drawing::Point(10, 223);
 			this->deleteEntryButton->Margin = System::Windows::Forms::Padding(10, 25, 10, 25);
 			this->deleteEntryButton->Name = L"deleteEntryButton";
-			this->deleteEntryButton->Size = System::Drawing::Size(154, 51);
+			this->deleteEntryButton->Size = System::Drawing::Size(160, 52);
 			this->deleteEntryButton->TabIndex = 3;
 			this->deleteEntryButton->Text = L"Удалить";
 			this->deleteEntryButton->UseVisualStyleBackColor = true;
@@ -194,7 +200,7 @@ namespace Sketch
 			this->editEntryButton->Location = System::Drawing::Point(10, 124);
 			this->editEntryButton->Margin = System::Windows::Forms::Padding(10, 25, 10, 25);
 			this->editEntryButton->Name = L"editEntryButton";
-			this->editEntryButton->Size = System::Drawing::Size(154, 49);
+			this->editEntryButton->Size = System::Drawing::Size(160, 49);
 			this->editEntryButton->TabIndex = 2;
 			this->editEntryButton->Text = L"Редактировать";
 			this->editEntryButton->UseVisualStyleBackColor = true;
@@ -216,18 +222,26 @@ namespace Sketch
 			dataGridViewCellStyle1->WrapMode = System::Windows::Forms::DataGridViewTriState::True;
 			this->mainDataGridView->ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this->mainDataGridView->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			dataGridViewCellStyle2->Alignment = System::Windows::Forms::DataGridViewContentAlignment::MiddleLeft;
+			dataGridViewCellStyle2->BackColor = System::Drawing::SystemColors::Window;
+			dataGridViewCellStyle2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 9.75F, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(204)));
+			dataGridViewCellStyle2->ForeColor = System::Drawing::SystemColors::ControlText;
+			dataGridViewCellStyle2->NullValue = nullptr;
+			dataGridViewCellStyle2->SelectionBackColor = System::Drawing::SystemColors::Highlight;
+			dataGridViewCellStyle2->SelectionForeColor = System::Drawing::SystemColors::HighlightText;
+			dataGridViewCellStyle2->WrapMode = System::Windows::Forms::DataGridViewTriState::False;
+			this->mainDataGridView->DefaultCellStyle = dataGridViewCellStyle2;
 			this->mainDataGridView->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->mainDataGridView->Location = System::Drawing::Point(177, 3);
+			this->mainDataGridView->Location = System::Drawing::Point(183, 3);
 			this->mainDataGridView->Name = L"mainDataGridView";
 			this->mainDataGridView->ReadOnly = true;
 			this->mainDataGridView->RowHeadersVisible = false;
 			this->mainDataGridView->RowHeadersWidthSizeMode = System::Windows::Forms::DataGridViewRowHeadersWidthSizeMode::DisableResizing;
 			this->tableLayoutPanel->SetRowSpan(this->mainDataGridView, 3);
 			this->mainDataGridView->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
-			this->mainDataGridView->Size = System::Drawing::Size(690, 293);
+			this->mainDataGridView->Size = System::Drawing::Size(714, 294);
 			this->mainDataGridView->TabIndex = 0;
-			this->mainDataGridView->RowsAdded += gcnew System::Windows::Forms::DataGridViewRowsAddedEventHandler(this, &EntryTableUserControl::mainDataGridView_RowsAdded);
-			this->mainDataGridView->RowsRemoved += gcnew System::Windows::Forms::DataGridViewRowsRemovedEventHandler(this, &EntryTableUserControl::mainDataGridView_RowsRemoved);
 			// 
 			// addEntryButton
 			// 
@@ -235,7 +249,7 @@ namespace Sketch
 			this->addEntryButton->Location = System::Drawing::Point(10, 25);
 			this->addEntryButton->Margin = System::Windows::Forms::Padding(10, 25, 10, 25);
 			this->addEntryButton->Name = L"addEntryButton";
-			this->addEntryButton->Size = System::Drawing::Size(154, 49);
+			this->addEntryButton->Size = System::Drawing::Size(160, 49);
 			this->addEntryButton->TabIndex = 1;
 			this->addEntryButton->Text = L"Создать";
 			this->addEntryButton->UseVisualStyleBackColor = true;
@@ -247,9 +261,9 @@ namespace Sketch
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->Controls->Add(this->tableLayoutPanel);
-			this->MinimumSize = System::Drawing::Size(870, 299);
+			this->MinimumSize = System::Drawing::Size(900, 300);
 			this->Name = L"EntryTableUserControl";
-			this->Size = System::Drawing::Size(870, 299);
+			this->Size = System::Drawing::Size(900, 300);
 			this->tableLayoutPanel->ResumeLayout(false);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->mainDataGridView))->EndInit();
 			this->ResumeLayout(false);
@@ -301,27 +315,27 @@ private:
 		System::Void buttons_SizeChanged(System::Object^ sender, System::EventArgs^ e) 
 	{
 		// Экспериментально подобранный коэффициент
-		const float buttonWidthScale = .08f;
-		const float headerCellsWidthScale = .06f;
+		//const float buttonWidthScale = .08f;
+		//const float headerCellsWidthScale = .06f;
 
-		// Новый шрифт с другим кеглем для кнопок
-		auto newButtonFont = gcnew System::Drawing::Font(
-			addEntryButton->Font->FontFamily, 
-			Math::Floor(addEntryButton->Width * buttonWidthScale),
-			System::Drawing::GraphicsUnit::Point);
+		//// Новый шрифт с другим кеглем для кнопок
+		//auto newButtonFont = gcnew System::Drawing::Font(
+		//	addEntryButton->Font->FontFamily, 
+		//	Math::Floor(addEntryButton->Width * buttonWidthScale),
+		//	System::Drawing::GraphicsUnit::Point);
 
-		addEntryButton->Font = newButtonFont;
-		editEntryButton->Font = newButtonFont;
-		deleteEntryButton->Font = newButtonFont;
+		//addEntryButton->Font = newButtonFont;
+		//editEntryButton->Font = newButtonFont;
+		//deleteEntryButton->Font = newButtonFont;
 
-		// Новый шрифт с другим кеглем для заголовков столбцов
-		auto newHeaderCellsFont = gcnew System::Drawing::Font(
-			addEntryButton->Font->FontFamily, 
-			(float)Math::Floor(Math::Max(addEntryButton->Width * headerCellsWidthScale, 10.f)), 
-			FontStyle::Bold, 
-			System::Drawing::GraphicsUnit::Point);
+		//// Новый шрифт с другим кеглем для заголовков столбцов
+		//auto newHeaderCellsFont = gcnew System::Drawing::Font(
+		//	addEntryButton->Font->FontFamily, 
+		//	(float)Math::Floor(Math::Max(addEntryButton->Width * headerCellsWidthScale, 10.f)), 
+		//	FontStyle::Bold, 
+		//	System::Drawing::GraphicsUnit::Point);
 
-		mainDataGridView->ColumnHeadersDefaultCellStyle->Font = newHeaderCellsFont;
+		//mainDataGridView->ColumnHeadersDefaultCellStyle->Font = newHeaderCellsFont;
 
 	}
 
@@ -402,25 +416,20 @@ private:
 			editForm->ShowDialog();
 		}
 
-		
+
 		/// <summary>
 		/// Определяем, осталась ли в таблица хотя бы одна запись.
 		/// </summary>
-		private: System::Void mainDataGridView_RowsRemoved(System::Object^ sender, System::Windows::Forms::DataGridViewRowsRemovedEventArgs^ e) 
-		{
-			// Если есть только 1 строка с заголовками
-			if (e->RowCount == 1)
-			{
-				_isFilled = false;
-			}
-		}
-
-		/// <summary>
-		/// Помечаем, что в таблице есть хотя бы одна запись.
-		/// </summary>
-		private: System::Void mainDataGridView_RowsAdded(System::Object^ sender, System::Windows::Forms::DataGridViewRowsAddedEventArgs^ e) 
-	{
-		_isFilled = true;
-	}
+		 System::Void OnListChanged(System::Object^ sender, System::ComponentModel::ListChangedEventArgs^ e)
+		 {
+			 if (EntryList->Count == 0)
+			 {
+			 	_isFilled = false;
+			 }
+			 else
+			 {
+			 	_isFilled = true;
+			 }
+		 }
 	};
 }
