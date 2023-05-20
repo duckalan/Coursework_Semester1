@@ -1,102 +1,61 @@
-#pragma once
+п»ї#pragma once
 #include "Pressure.h"
 #include "HealthState.h"
 #include "TimePeriod.h"
 
 using namespace System;
+using namespace System::ComponentModel;
 
 namespace Sketch
 {
 	/// <summary>
-	/// Запись сведений о состоянии здоровья пациента.
+	/// Р—Р°РїРёСЃСЊ СЃРІРµРґРµРЅРёР№ Рѕ СЃРѕСЃС‚РѕСЏРЅРёРё Р·РґРѕСЂРѕРІСЊСЏ РїР°С†РёРµРЅС‚Р°.
 	/// </summary>
+	[Serializable]
 	public ref class HealthEntry
 	{
-	private:
-		/// <summary>
-		/// Дата создания записи.
-		/// </summary>
-		DateTime _recordDate;
-
-		/// <summary>
-		/// Период времени в момент, когда была сделана запись.
-		/// </summary>
-		TimePeriod _recordTimePeriod;
-
-		/// <summary>
-		/// Давление пациента.
-		/// </summary>
-		Sketch::Pressure _pressure;
-
-		/// <summary>
-		/// Пульс пациента.
-		/// </summary>
-		UInt16 _pulse;
-
-		/// <summary>
-		/// Общее состояние здоровья пациента.
-		/// </summary>
-		HealthState _healthState;
-
-		/// <summary>
-		/// Примечание.
-		/// </summary>
-		String^ _remark;
-
 	public:
 		HealthEntry(DateTime recordDate,
 					Sketch::TimePeriod recordTimePeriod,
 					Sketch::Pressure pressure,
-					UInt16 pulse,
+					Byte pulse,
 					Sketch::HealthState healthState,
 					String^ remark);
 
 		/// <summary>
-		/// Получить дату создания записи.
+		/// РџСЂРёРјРµС‡Р°РЅРёРµ.
 		/// </summary>
-		property DateTime RecordDate 
-		{
-			DateTime get();
-		}
+		[DisplayName("РџСЂРёРјРµС‡Р°РЅРёРµ")]
+		property String^ Remark;
 
 		/// <summary>
-		/// Получить период времени в момент, когда была сделана запись.
+		/// РџСѓР»СЊСЃ РїР°С†РёРµРЅС‚Р°.
 		/// </summary>
-		property TimePeriod RecordTimePeriod
-		{
-			TimePeriod get();
-		}
+		[DisplayName("РџСѓР»СЊСЃ")]
+		property Byte Pulse;
 
 		/// <summary>
-		/// Получить давление пациента.
+		/// Р”Р°РІР»РµРЅРёРµ РїР°С†РёРµРЅС‚Р°.
 		/// </summary>
-		property Sketch::Pressure Pressure
-		{
-			Sketch::Pressure get();
-		}
+		[DisplayName("Р”Р°РІР»РµРЅРёРµ")]
+		property Sketch::Pressure Pressure;
 
 		/// <summary>
-		/// Получить пульс пациента.
+		/// РћР±С‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ Р·РґРѕСЂРѕРІСЊСЏ РїР°С†РёРµРЅС‚Р°.
 		/// </summary>
-		property UInt16 Pulse
-		{
-			UInt16 get();
-		}
+		[DisplayName("РЎРѕСЃС‚РѕСЏРЅРёРµ Р·РґРѕСЂРѕРІСЊСЏ")]
+		property Sketch::HealthState HealthState;
 
 		/// <summary>
-		/// Получить общее состояние здоровья пациента.
+		/// РџРµСЂРёРѕРґ РІСЂРµРјРµРЅРё РІ РјРѕРјРµРЅС‚, РєРѕРіРґР° Р±С‹Р»Р° СЃРґРµР»Р°РЅР° Р·Р°РїРёСЃСЊ.
 		/// </summary>
-		property Sketch::HealthState HealthState
-		{
-			Sketch::HealthState get();
-		}
+		[DisplayName("РџРµСЂРёРѕРґ Р·Р°РїРёСЃРё")]
+		property TimePeriod RecordTimePeriod;
 
 		/// <summary>
-		/// Получить примечание.
+		/// Р”Р°С‚Р° СЃРѕР·РґР°РЅРёСЏ Р·Р°РїРёСЃРё.
 		/// </summary>
-		property String^ Remark
-		{
-			String^ get();
-		}
+		[DisplayName("Р”Р°С‚Р° Р·Р°РїРёСЃРё")]
+		property DateTime RecordDate;
 	};
 }
